@@ -30,7 +30,6 @@ extends JFrame {
     private int applicationHeight = 800;
     private JSlider slider;
     private JPanel sideMenu = new JPanel();
-    private MenuBar menuBar = new MenuBar();
 
     public MainFrame(String name) {
         super(name);
@@ -45,9 +44,7 @@ extends JFrame {
         this.picturePanel = new JPanel();
         this.picturePanel.setBackground(Color.orange);
         //this.add(sideMenu, BorderLayout.WEST);
-        this.add(menuBar.setMenuBar(),BorderLayout.NORTH);
         this.add(this.picturePanel, BorderLayout.CENTER);
-       // this.add(menuBar.setMenuBar());
         
     }
 

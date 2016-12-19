@@ -38,8 +38,7 @@ public class OptionPanelButtons {
     public OptionPanelButtons() {
        
         
-        JMenuItem cutMenuItem = new JMenuItem("Cut");
-        popupMenu.add(cutMenuItem);
+
        
         JButton RGB = new JButton("RGB");
         JButton red = new JButton("red");
