@@ -24,6 +24,10 @@ import java.util.logging.Logger;
 public class Filters {
 
      public static void main(String[] args) {
+          int a[][] = {{1,2,3},
+                       {4,5,6},
+                       {7,8,9}};
+         System.out.println(a.length + a[0].length + a[1].length + a[2].length);
 
         EventQueue.invokeLater(new Runnable() {
         
@@ -35,6 +39,8 @@ public class Filters {
                 a.setMainFrame("testFrame");
                 b.setBackground(Color.yellow);
                 a.add(b, BorderLayout.NORTH);
+                
+               
                 
             }
         });

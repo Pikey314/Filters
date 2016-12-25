@@ -19,6 +19,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import matrixManiFunctions.MatrixFunctions;
 
 /**
  *
@@ -26,13 +27,14 @@ import javax.swing.JTextField;
  */
 public class MenuBar {
     
-    private RGBFilters rgbFilters = new RGBFilters();
-    private ArrayList buttons = new ArrayList();
+    private final RGBFilters rgbFilters = new RGBFilters();
+    private final ArrayList buttons = new ArrayList();
     private MainFrame mainFrame;
-    private JTextField filename = new JTextField();
-    private JTextField dir = new JTextField();
+    private final JTextField filename = new JTextField();
+    private final JTextField dir = new JTextField();
+    private final MatrixFunctions matrixFunction = new MatrixFunctions();
     FileOperations fileOperations = new FileOperations();
-    private SideMenu sideMenu = new SideMenu();
+    private final SideMenu sideMenu = new SideMenu();
     JPopupMenu popupMenu = new JPopupMenu("Title");
     
     public JMenuBar setMenuBar() {
@@ -47,25 +49,228 @@ public class MenuBar {
             
         JMenu filters = new JMenu("Filters");
             JMenu colorFilters = new JMenu("Color Filtes");
-                JMenuItem redFilter = new JMenuItem("Red Filter");
-                JMenuItem greenFilter = new JMenuItem("Green Filter");
-                JMenuItem blueFilter = new JMenuItem("Blue Filter");
+                JMenuItem redFilter = new JMenuItem("Red Filter"); //filtr czerwony
+                JMenuItem greenFilter = new JMenuItem("Green Filter"); //filtr zielony
+                JMenuItem blueFilter = new JMenuItem("Blue Filter"); //filtr niebieski
             colorFilters.add(redFilter);
             colorFilters.add(greenFilter);
             colorFilters.add(blueFilter);
         filters.add(colorFilters);
-            
+            JMenu lowPass = new JMenu("Lowpass Filters"); //filtry dolnoprzepustowe
+                JMenuItem averaging = new JMenuItem("Averaging Filter"); //filtr usredniający (rozmwyanie)
+                JMenuItem lp1 = new JMenuItem("LP1 Filter"); //filtr LP1 (rozmwyanie)
+                JMenuItem lp2 = new JMenuItem("LP2 Filter"); //filtr LP2 (rozmwyanie)
+                JMenuItem lp3 = new JMenuItem("LP3 Filter"); //filtr LP3 (rozmwyanie)
+                JMenuItem gauss1 = new JMenuItem("Gauss1 Filter"); //filtr Gauss1 (rozmwyanie)
+            lowPass.add(averaging);
+            lowPass.add(lp1);
+            lowPass.add(lp2);
+            lowPass.add(lp3);
+            lowPass.add(gauss1);
+        filters.add(lowPass);
+            JMenu highPass = new JMenu("Highpass Filters"); //filtry górnoprzepustowe
+                JMenuItem removeAverage = new JMenuItem("Remove Average Filter"); //filtr usuń średnią (wysostrzanie)
+                JMenuItem hp1 = new JMenuItem("HP1 Filter"); //filtr HP1
+                JMenuItem hp2 = new JMenuItem("HP2 Filter"); //filtr HP2
+                JMenuItem hp3 = new JMenuItem("HP3 Filter"); //filtr HP3
+            highPass.add(removeAverage);
+            highPass.add(hp1);
+            highPass.add(hp2);
+            highPass.add(hp3);
+        filters.add(highPass);
+            JMenu moveAndRemove = new JMenu("Move and Remove Filters"); //filtry przesuwania i odejmowania
+                JMenuItem vertical = new JMenuItem("Vertical Filter");  //fitr pionowy
+                JMenuItem horizontal = new JMenuItem("Horizontal Filter"); //filtr poziomy
+                JMenuItem oblique1 = new JMenuItem("Oblique 1 Filter"); //filtr ukośny 1
+                JMenuItem oblique2 = new JMenuItem("Oblique 2 Filter"); //filtr ukośny 2
+            moveAndRemove.add(vertical);
+            moveAndRemove.add(horizontal);
+            moveAndRemove.add(oblique1);
+            moveAndRemove.add(oblique2);
+        filters.add(moveAndRemove);
+            JMenu gradient = new JMenu("Gradient Directional Filters"); // gradientowe filtry kierunkowe
+                JMenuItem west = new JMenuItem("West Filter"); //filtr zachodni
+                JMenuItem east = new JMenuItem("East Filter"); //filtr wschodni
+                JMenuItem north = new JMenuItem("North Filter"); //filtr północny
+                JMenuItem south = new JMenuItem("South Filter"); //filtr południowy
+                JMenuItem northwest = new JMenuItem("North-West Filter"); //filtr północno - zachodni
+                JMenuItem southwest = new JMenuItem("South-West Filter"); //filtr południowo - zachodni
+                JMenuItem northeast = new JMenuItem("North-East Filter"); //filtr północno - wschodni
+                JMenuItem southeast = new JMenuItem("South-East Filter"); //filtr południowo - wschodni
+            gradient.add(west);
+            gradient.add(east);
+            gradient.add(north);
+            gradient.add(south);
+            gradient.add(northwest);
+            gradient.add(southwest);
+            gradient.add(northeast);
+            gradient.add(southeast);
+        filters.add(gradient);
+            JMenu embossing = new JMenu("Embossing filters"); //filtry uwypuklające
+                JMenuItem westE = new JMenuItem("West Filter"); //filtr zachodni
+                JMenuItem eastE = new JMenuItem("East Filter"); //filtr wschodni
+                JMenuItem northE = new JMenuItem("North Filter"); //filtr północny
+                JMenuItem southE = new JMenuItem("South Filter"); //filtr południowy
+                JMenuItem northwestE = new JMenuItem("North-West Filter"); //filtr północno - zachodni
+                JMenuItem southwestE = new JMenuItem("South-West Filter"); //filtr południowo - zachodni
+                JMenuItem northeastE = new JMenuItem("North-East Filter"); //filtr północno - wschodni
+                JMenuItem southeastE = new JMenuItem("South-East Filter"); //filtr południowo - wschodni
+           embossing.add(westE); 
+           embossing.add(eastE);
+           embossing.add(northE);
+           embossing.add(southE);
+           embossing.add(northwestE);
+           embossing.add(southwestE);
+           embossing.add(northeastE);
+           embossing.add(southeastE);
+        filters.add(embossing);
         menuBar.add(file);
         menuBar.add(filters);
         
         //SET INITIAL ACCTION LISTENER START
-        sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    }
-                });
+        sideMenu.getAcceptButton().addActionListener((ActionEvent event) -> {
+        });
+        //SET INITIAL ACCTION LISTENER END
+        
+
+
+        //SET NECESSARRY VARIALBLES START
+        //Filtry dolnoprzepustowe - macierze
+        int averagingMatrix[][]   =    {{1,1,1},
+                                        {1,1,1},
+                                        {1,1,1}};
+       
+        int lP1Matrix[][]   =           {{1,1,1},
+                                        {1,2,1},
+                                        {1,1,1}};
+        
+        int lP2Matrix[][]   =          {{1,1,1},
+                                        {1,4,1},
+                                        {1,1,1}};
+        
+        int lP3Matrix[][]   =          {{1,1,1},
+                                        {1,12,1},
+                                        {1,1,1}};
+        
+        int gauss1Matrix[][]   =       {{1,2,1},
+                                        {2,4,2},
+                                        {1,2,1}};
+       
+        //Filtry górnoprzepustowe - macierze
+        int removeAverageMatrix[][] = {{-1,-1,-1},
+                                         {-1,9,-1},
+                                        {-1,-1,-1}};
+         
+        int hp1Matrix[][] =           {{0,-1,0},
+                                        {-1,5,-1},
+                                         {0,-1,0}};
+          
+        int hp2Matrix[][] =           {{1,-2,1},
+                                         {-2,5,-2},
+                                         {1,-2,1}};
+           
+        int hp3Matrix[][] =           {{0,-1,0},
+                                         {-1,20,-1},
+                                         {0,-1,0}};
+        
+        //Filtry przesuwania i odejmowania - macierze
+        int horizontalMatrix[][] =           {{0,0,0},
+                                            {-1,1,0},
+                                            {0,0,0}};
+        
+        int verticalMatrix[][] =           {{0,-1,0},
+                                            {0,1,0},
+                                            {0,0,0}};
+        
+        int oblique1Matrix[][] =           {{-1,0,0},
+                                            {0,1,0},
+                                            {0,0,0}};
+        
+        int oblique2Matrix[][] =           {{0,0,-1},
+                                            {0,1,0},
+                                            {0,0,0}};
+        
+        //Filtry gradientowe kierunkowe
+        int eastMatrix[][] =               {{-1,1,1},
+                                            {-1,-2,1},
+                                            {-1,1,1}};
+        
+        int westMatrix[][] =                {{1,1,-1},
+                                            {1,-2,-1},
+                                             {1,1,-1}};
+        
+        int northMatrix[][] =              {{1,1,1},
+                                            {1,-2,1},
+                                           {-1,-1,-1}};
+        
+        int southMatrix[][] =              {{-1,-1,-1},
+                                            {1,-2,1},
+                                            {1,1,1}};
+        
+        int southEastMatrix[][] =          {{-1,-1,1},
+                                           {-1,-2,1},
+                                            {1,1,1}};
+        
+        int southWestMatrix[][] =          {{1,-1,-1},
+                                           {1,-2,-1},
+                                           {1,1,1}};
+        
+        int northWestMatrix[][] =          {{1,1,1},
+                                           {1,-2,-1},
+                                           {1,-1,-1}};
+        
+        int northEastMatrix[][] =          {{1,1,1},
+                                           {-1,-2,1},
+                                           {-1,-1,1}};
+        
+        //filtry uwypuklające - macierze
+        int embossingEastMatrix[][] =      {{-1,0,1},
+                                            {-1,1,1},
+                                            {-1,0,1}};
+        
+        int embossingWestMatrix[][] =      {{1,0,-1},
+                                            {1,1,-1},
+                                             {1,0,-1}};
+        
+        int embossingNorthMatrix[][] =     {{1,1,1},
+                                            {0,1,0},
+                                           {-1,-1,-1}};
+        
+        int embossingSouthMatrix[][] =     {{-1,-1,-1},
+                                            {0,1,0},
+                                            {1,1,1}};
+        
+        int embossingSouthEastMatrix[][] = {{-1,-1,0},
+                                           {-1,1,1},
+                                            {0,1,1}};
+        
+        int embossingSouthWestMatrix[][] = {{0,-1,-1},
+                                           {1,1,-1},
+                                           {1,1,0}};
+        
+        int embossingNorthWestMatrix[][] =  {{1,1,0},
+                                           {1,1,-1},
+                                           {0,-1,-1}};
+        
+        int embossingNorthEastMatrix[][] =  {{0,1,1},
+                                           {-1,1,1},
+                                           {-1,-1,0}};        
+        
+        
         
         //SET INITIAL ACCTION LISTENER END
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -93,6 +298,267 @@ public class MenuBar {
         
         
         //for FILTERS START
+        eastE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingEastMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        westE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingWestMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        southE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingSouthMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        northE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingNorthMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        northwestE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingNorthWestMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+         southwestE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingSouthWestMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+         
+         northeastE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingNorthEastMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+         
+        southeastE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingSouthEastMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        northeast.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), northEastMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        southeast.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), southEastMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        northwest.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), northWestMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        southwest.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), southWestMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        south.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), southMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        north.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), northMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        east.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), eastMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        west.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), westMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        oblique2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), oblique2Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        oblique1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), oblique1Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        horizontal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), horizontalMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+         vertical.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), verticalMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+         
+        removeAverage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), removeAverageMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        hp3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), hp3Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        hp2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), hp2Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        hp1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), hp1Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        gauss1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), gauss1Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        lp3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lP3Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        lp2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lP2Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        lp1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lP1Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        averaging.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), averagingMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
         blueFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {

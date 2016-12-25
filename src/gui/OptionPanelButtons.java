@@ -22,11 +22,13 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import matrixManiFunctions.MatrixFunctions;
 
 public class OptionPanelButtons {
     
     private RGBFilters rgbFilters = new RGBFilters();
     private ArrayList buttons = new ArrayList();
+    private MatrixFunctions matrixFunction = new MatrixFunctions();
     private MainFrame mainFrame;
     private JTextField filename = new JTextField();
     private JTextField dir = new JTextField();
@@ -45,19 +47,22 @@ public class OptionPanelButtons {
         JButton openFile = new JButton("Open File");
         JButton saveFile = new JButton("Save File");
         JButton green = new JButton("green");
-        JButton blue = new JButton("blue");
+        JButton test = new JButton("test");
         
+         int a[][] = {{1,1,1},
+                      {1,1,1},
+                      {1,1,1}};
         
         
        RGB.setComponentPopupMenu(popupMenu);
-        blue.addActionListener(new ActionListener() {
+        test.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                mainFrame.add(sideMenu.setSideMenu(), BorderLayout.WEST);
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
-                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "blue", sideMenu.getTextFieldValue());
+                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), a, 3);
                     mainFrame.revalidate();
                     }
                 });
@@ -107,7 +112,7 @@ public class OptionPanelButtons {
         this.buttons.add(saveFile);
         this.buttons.add(red);
         this.buttons.add(green);
-        this.buttons.add(blue);
+        this.buttons.add(test);
         
     }
 
