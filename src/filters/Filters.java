@@ -18,6 +18,9 @@ import java.util.logging.Logger;
  *
  * @author Maciek P
  */
+
+//DODAĆ własne sekwencje szablonow  - 1 przycusk wlasny filtr
+//wgrywac obraz w rozdzielczosci oryginalnej
 public class Filters {
 
      public static void main(String[] args) {
