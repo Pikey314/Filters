@@ -17,6 +17,7 @@ import javax.swing.JPanel;
  * @author Maciek P
  */
 public class RGBFilters {
+    
       
     public void rgbFilter(BufferedImage image, JPanel picturePanel, String color, int value) {
        
@@ -66,6 +67,7 @@ public class RGBFilters {
         JLabel imageLabel = new JLabel(pic);
         picturePanel.removeAll();
         picturePanel.add(imageLabel);
+        
     }
 }
 

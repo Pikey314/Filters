@@ -6,6 +6,7 @@
 package gui;
 
 
+import guiOperations.UndoRedoOperations;
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -17,10 +18,13 @@ public class OptionPanel extends JPanel {
     MenuBar menu = new MenuBar();
     JPanel buttonPanel = new JPanel();
 
-    public OptionPanel(MainFrame mF) {
+    public OptionPanel(MainFrame mF, UndoRedoOperations ur) {
         this.setLayout(new BorderLayout());
         this.buttons.setProperMainFrame(mF);
         this.menu.setProperMainFrame(mF);
+        this.buttons.setProperUndoRedo(ur);
+        this.menu.setProperUndoRedo(ur);
+        this.menu.setProperOptionPanelButtons(buttons);
         int numberOfButtons = this.buttons.getButtons().size();
         this.add(menu.setMenuBar(), BorderLayout.NORTH);
         for (int i = 0; i < numberOfButtons; ++i) {

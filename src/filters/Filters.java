@@ -7,11 +7,14 @@ package filters;
 
 import gui.MainFrame;
 import gui.OptionPanel;
+import guiOperations.UndoRedoOperations;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -24,10 +27,8 @@ import java.util.logging.Logger;
 public class Filters {
 
      public static void main(String[] args) {
-          int a[][] = {{1,2,3},
-                       {4,5,6},
-                       {7,8,9}};
-         System.out.println(a.length + a[0].length + a[1].length + a[2].length);
+         //testowe operacje
+         
 
         EventQueue.invokeLater(new Runnable() {
         
@@ -35,7 +36,8 @@ public class Filters {
             public void run() {
                 
                 MainFrame a = new MainFrame("testFrame");
-                OptionPanel b = new OptionPanel(a);
+                UndoRedoOperations ur = new UndoRedoOperations();
+                OptionPanel b = new OptionPanel(a,ur);
                 a.setMainFrame("testFrame");
                 b.setBackground(Color.yellow);
                 a.add(b, BorderLayout.NORTH);

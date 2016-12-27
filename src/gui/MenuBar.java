@@ -7,6 +7,7 @@ package gui;
 
 import colorFilters.RGBFilters;
 import guiOperations.FileOperations;
+import guiOperations.UndoRedoOperations;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +31,8 @@ public class MenuBar {
     private final RGBFilters rgbFilters = new RGBFilters();
     private final ArrayList buttons = new ArrayList();
     private MainFrame mainFrame;
+    UndoRedoOperations undoRedo;
+    OptionPanelButtons optionPanelButtons;
     private final JTextField filename = new JTextField();
     private final JTextField dir = new JTextField();
     private final MatrixFunctions matrixFunction = new MatrixFunctions();
@@ -124,6 +127,30 @@ public class MenuBar {
            embossing.add(northeastE);
            embossing.add(southeastE);
         filters.add(embossing);
+            JMenu laplace = new JMenu("Laplace Filters");
+                JMenuItem lap1 = new JMenuItem("LAP1");
+                JMenuItem lap2 = new JMenuItem("LAP2");
+                JMenuItem lap3 = new JMenuItem("LAP3");
+                JMenuItem lapOblique = new JMenuItem("oblique");
+                JMenuItem lapHorizontal = new JMenuItem("horizontal");
+                JMenuItem lapVertical = new JMenuItem("vertical");
+            laplace.add(lap1);
+            laplace.add(lap2);
+            laplace.add(lap3);
+            laplace.add(lapOblique);
+            laplace.add(lapHorizontal);
+            laplace.add(lapVertical);
+        filters.add(laplace);
+            JMenu edges = new JMenu("Edges Filters");
+                JMenuItem sobelVertical = new JMenuItem("Sobel Vertical filter");
+                JMenuItem sobelHorizontal = new JMenuItem("Sobel Horizontal filter");
+                JMenuItem prewittVertical = new JMenuItem("Prewitt Vertical filter");
+                JMenuItem prewittHorizontal = new JMenuItem("Prewitt Horizontal filter");
+            edges.add(sobelVertical);
+            edges.add(sobelHorizontal);
+            edges.add(prewittVertical);
+            edges.add(prewittHorizontal);
+        filters.add(edges);
         menuBar.add(file);
         menuBar.add(filters);
         
@@ -254,7 +281,55 @@ public class MenuBar {
         
         int embossingNorthEastMatrix[][] =  {{0,1,1},
                                            {-1,1,1},
-                                           {-1,-1,0}};        
+                                           {-1,-1,0}};       
+        
+        //filtry laplace'a - macierze
+        
+        int lap1Matrix[][] =               {{0,-1,0},
+                                           {-1,4,-1},
+                                           {0,-1,0}}; 
+        
+        int lap2Matrix[][] =               {{-1,-1,-1},
+                                            {-1,8,-1},
+                                           {-1,-1,-1}}; 
+        
+        int lap3Matrix[][] =               {{1,-2,1},
+                                           {-2,4,-2},
+                                           {1,-2,1}}; 
+        
+        int lapObliqueMatrix[][] =         {{-1,0,-1},
+                                           {0,4,0},
+                                           {-1,0,-1}};
+        
+        int lapVerticalMatrix[][] =        {{0,0,0},
+                                           {-1,2,-1},
+                                           {0,0,0}};
+        
+        int lapHorizontalMatrix[][] =      {{0,-1,0},
+                                           {0,2,0},
+                                           {0,-1,0}};
+        
+        //filtry konturowe - macierze
+        
+        int sobelVerticalMatrix[][] =      {{1,0,-1},
+                                           {2,0,-2},
+                                           {1,0,-1}};
+        
+        int sobelHorizontalMatrix[][] =    {{1,2,1},
+                                           {0,0,0},
+                                           {-1,-2,-1}};
+        
+        int prewittHorizontalMatrix[][] =  {{-1,-1,-1},
+                                           {0,0,0},
+                                           {1,1,1}};
+        
+        int prewittVerticalMatrix[][] =   {{1,0,-1},
+                                           {1,0,-1},
+                                           {1,0,-1}};
+        
+        
+        
+        
         
         
         
@@ -298,10 +373,100 @@ public class MenuBar {
         
         
         //for FILTERS START
+        prewittHorizontal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), prewittHorizontalMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        prewittVertical.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), prewittVerticalMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        sobelHorizontal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), sobelHorizontalMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        sobelVertical.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), sobelVerticalMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        lapVertical.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lapVerticalMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        lapHorizontal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lapHorizontalMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        lapOblique.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lapObliqueMatrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        lap3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lap3Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        lap2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lap2Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
+        lap1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lap1Matrix, 3);
+              mainFrame.revalidate();
+            }
+        });
+        
         eastE.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingEastMatrix, 3);
               mainFrame.revalidate();
             }
@@ -310,7 +475,7 @@ public class MenuBar {
         westE.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingWestMatrix, 3);
               mainFrame.revalidate();
             }
@@ -319,7 +484,7 @@ public class MenuBar {
         southE.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingSouthMatrix, 3);
               mainFrame.revalidate();
             }
@@ -328,7 +493,7 @@ public class MenuBar {
         northE.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingNorthMatrix, 3);
               mainFrame.revalidate();
             }
@@ -337,7 +502,7 @@ public class MenuBar {
         northwestE.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingNorthWestMatrix, 3);
               mainFrame.revalidate();
             }
@@ -346,7 +511,7 @@ public class MenuBar {
          southwestE.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingSouthWestMatrix, 3);
               mainFrame.revalidate();
             }
@@ -355,7 +520,7 @@ public class MenuBar {
          northeastE.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingNorthEastMatrix, 3);
               mainFrame.revalidate();
             }
@@ -364,7 +529,7 @@ public class MenuBar {
         southeastE.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), embossingSouthEastMatrix, 3);
               mainFrame.revalidate();
             }
@@ -373,7 +538,7 @@ public class MenuBar {
         northeast.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), northEastMatrix, 3);
               mainFrame.revalidate();
             }
@@ -382,7 +547,7 @@ public class MenuBar {
         southeast.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), southEastMatrix, 3);
               mainFrame.revalidate();
             }
@@ -391,7 +556,7 @@ public class MenuBar {
         northwest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), northWestMatrix, 3);
               mainFrame.revalidate();
             }
@@ -400,7 +565,7 @@ public class MenuBar {
         southwest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), southWestMatrix, 3);
               mainFrame.revalidate();
             }
@@ -409,7 +574,7 @@ public class MenuBar {
         south.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), southMatrix, 3);
               mainFrame.revalidate();
             }
@@ -418,7 +583,7 @@ public class MenuBar {
         north.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), northMatrix, 3);
               mainFrame.revalidate();
             }
@@ -427,7 +592,7 @@ public class MenuBar {
         east.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), eastMatrix, 3);
               mainFrame.revalidate();
             }
@@ -436,7 +601,7 @@ public class MenuBar {
         west.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), westMatrix, 3);
               mainFrame.revalidate();
             }
@@ -445,7 +610,7 @@ public class MenuBar {
         oblique2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), oblique2Matrix, 3);
               mainFrame.revalidate();
             }
@@ -454,7 +619,7 @@ public class MenuBar {
         oblique1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), oblique1Matrix, 3);
               mainFrame.revalidate();
             }
@@ -463,7 +628,7 @@ public class MenuBar {
         horizontal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), horizontalMatrix, 3);
               mainFrame.revalidate();
             }
@@ -472,7 +637,7 @@ public class MenuBar {
          vertical.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), verticalMatrix, 3);
               mainFrame.revalidate();
             }
@@ -481,7 +646,7 @@ public class MenuBar {
         removeAverage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), removeAverageMatrix, 3);
               mainFrame.revalidate();
             }
@@ -490,7 +655,7 @@ public class MenuBar {
         hp3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), hp3Matrix, 3);
               mainFrame.revalidate();
             }
@@ -499,7 +664,7 @@ public class MenuBar {
         hp2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), hp2Matrix, 3);
               mainFrame.revalidate();
             }
@@ -508,7 +673,7 @@ public class MenuBar {
         hp1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), hp1Matrix, 3);
               mainFrame.revalidate();
             }
@@ -517,7 +682,7 @@ public class MenuBar {
         gauss1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), gauss1Matrix, 3);
               mainFrame.revalidate();
             }
@@ -526,7 +691,7 @@ public class MenuBar {
         lp3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lP3Matrix, 3);
               mainFrame.revalidate();
             }
@@ -535,7 +700,7 @@ public class MenuBar {
         lp2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lP2Matrix, 3);
               mainFrame.revalidate();
             }
@@ -544,7 +709,7 @@ public class MenuBar {
         lp1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), lP1Matrix, 3);
               mainFrame.revalidate();
             }
@@ -553,7 +718,7 @@ public class MenuBar {
         averaging.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-              
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), averagingMatrix, 3);
               mainFrame.revalidate();
             }
@@ -567,6 +732,7 @@ public class MenuBar {
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "blue", sideMenu.getTextFieldValue());
                     mainFrame.revalidate();
                     }
@@ -583,6 +749,7 @@ public class MenuBar {
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "green", sideMenu.getTextFieldValue());
                     mainFrame.revalidate();
                     }
@@ -599,6 +766,7 @@ public class MenuBar {
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "red", sideMenu.getTextFieldValue());
                     mainFrame.revalidate();
                     }
@@ -632,5 +800,13 @@ public class MenuBar {
     
      public void setProperMainFrame(MainFrame mF) {
         this.mainFrame = mF;
+    }
+    
+     public void setProperUndoRedo(UndoRedoOperations ur) {
+        this.undoRedo = ur;
+    }
+     
+     public void setProperOptionPanelButtons(OptionPanelButtons opb) {
+        this.optionPanelButtons = opb;
     }
 }
