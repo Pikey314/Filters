@@ -21,6 +21,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import matrixManiFunctions.MatrixFunctions;
+import matrixManiFunctions.StatisticFunctions;
 
 /**
  *
@@ -39,6 +40,7 @@ public class MenuBar {
     FileOperations fileOperations = new FileOperations();
     private final SideMenu sideMenu = new SideMenu();
     JPopupMenu popupMenu = new JPopupMenu("Title");
+    StatisticFunctions statisticFunction = new StatisticFunctions();
     
     public JMenuBar setMenuBar() {
         JMenuBar menuBar = new JMenuBar();
@@ -55,10 +57,30 @@ public class MenuBar {
                 JMenuItem redFilter = new JMenuItem("Red Filter"); //filtr czerwony
                 JMenuItem greenFilter = new JMenuItem("Green Filter"); //filtr zielony
                 JMenuItem blueFilter = new JMenuItem("Blue Filter"); //filtr niebieski
+                JMenuItem yellowFilter = new JMenuItem("Yellow Filter"); //filtr żółty
+                JMenuItem purpleFilter = new JMenuItem("Purple Filter"); //filtr fioletowy
+                JMenuItem cyanFilter = new JMenuItem("Cyan Filter"); //filtr cyjanowy
             colorFilters.add(redFilter);
             colorFilters.add(greenFilter);
             colorFilters.add(blueFilter);
+            colorFilters.add(yellowFilter);
+            colorFilters.add(purpleFilter);
+            colorFilters.add(cyanFilter);
         filters.add(colorFilters);
+            JMenu brightFilters = new JMenu("Brightness Filtes");
+                JMenuItem dark = new JMenuItem("Dark Filter"); //filtr ciemny
+                JMenuItem bright = new JMenuItem("Bright Filter"); //filtr jasny
+            brightFilters.add(dark);
+            brightFilters.add(bright);
+        filters.add(brightFilters);
+            JMenu symetric = new JMenu("Symetric Filtes");
+                JMenuItem negative = new JMenuItem("Negative Filter"); //filtr negatyw
+                JMenuItem greyScale = new JMenuItem("Grey Scale Filter");
+                JMenuItem sepia = new JMenuItem("Sepia Filter");
+            symetric.add(negative);
+            symetric.add(greyScale);
+            symetric.add(sepia);
+        filters.add(symetric);
             JMenu lowPass = new JMenu("Lowpass Filters"); //filtry dolnoprzepustowe
                 JMenuItem averaging = new JMenuItem("Averaging Filter"); //filtr usredniający (rozmwyanie)
                 JMenuItem lp1 = new JMenuItem("LP1 Filter"); //filtr LP1 (rozmwyanie)
@@ -151,6 +173,14 @@ public class MenuBar {
             edges.add(prewittVertical);
             edges.add(prewittHorizontal);
         filters.add(edges);
+            JMenu statistics = new JMenu("Statistic Filters");
+                JMenuItem median = new JMenuItem("Median Filter");
+                JMenuItem maximal = new JMenuItem("Maximal Filter");
+                JMenuItem minimal = new JMenuItem("Minimal Filter");
+            statistics.add(median);
+            statistics.add(maximal);
+            statistics.add(minimal);
+        filters.add(statistics);
         menuBar.add(file);
         menuBar.add(filters);
         
@@ -373,6 +403,33 @@ public class MenuBar {
         
         
         //for FILTERS START
+        median.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              statisticFunction.statisticFunction(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Median");
+              mainFrame.revalidate();
+            }
+        });
+        
+        maximal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              statisticFunction.statisticFunction(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Maximal");
+              mainFrame.revalidate();
+            }
+        });
+        
+        minimal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              statisticFunction.statisticFunction(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Minimal");
+              mainFrame.revalidate();
+            }
+        });
+        
         prewittHorizontal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -768,6 +825,142 @@ public class MenuBar {
                     public void actionPerformed(ActionEvent event) {
                         undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "red", sideMenu.getTextFieldValue());
+                    mainFrame.revalidate();
+                    }
+                });
+              mainFrame.revalidate();
+            }
+        });
+        
+        yellowFilter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.setSideMenu(), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "yellow", sideMenu.getTextFieldValue());
+                    mainFrame.revalidate();
+                    }
+                });
+              mainFrame.revalidate();
+            }
+        });
+        
+        purpleFilter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.setSideMenu(), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "purple", sideMenu.getTextFieldValue());
+                    mainFrame.revalidate();
+                    }
+                });
+              mainFrame.revalidate();
+            }
+        });
+        
+        cyanFilter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.setSideMenu(), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "cyan", sideMenu.getTextFieldValue());
+                    mainFrame.revalidate();
+                    }
+                });
+              mainFrame.revalidate();
+            }
+        });
+        
+        bright.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.setSideMenu(), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "white", sideMenu.getTextFieldValue());
+                    mainFrame.revalidate();
+                    }
+                });
+              mainFrame.revalidate();
+            }
+        });
+        
+        dark.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.setSideMenu(), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "black", sideMenu.getTextFieldValue());
+                    mainFrame.revalidate();
+                    }
+                });
+              mainFrame.revalidate();
+            }
+        });
+        
+        negative.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.setSideMenu(), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "negative", sideMenu.getTextFieldValue());
+                    mainFrame.revalidate();
+                    }
+                });
+              mainFrame.revalidate();
+            }
+        });
+        
+        greyScale.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.setSideMenu(), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "greyScale", sideMenu.getTextFieldValue());
+                    mainFrame.revalidate();
+                    }
+                });
+              mainFrame.revalidate();
+            }
+        });
+        
+        sepia.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.setSideMenu(), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "sepia", sideMenu.getTextFieldValue());
                     mainFrame.revalidate();
                     }
                 });

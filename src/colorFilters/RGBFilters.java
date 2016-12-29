@@ -30,8 +30,8 @@ public class RGBFilters {
             int argb;
         
         
-        for (int i = 0; i < image.getHeight()-1; i++) {
-            for (int j = 0; j < image.getWidth()-1; j++) {
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
                 colorOfPixel = new Color(image.getRGB(j,i));
                 
                 if ("red".equals(color))
@@ -50,7 +50,7 @@ public class RGBFilters {
                     blue = colorOfPixel.getBlue()-value;
                     if (blue < 0) blue = 0;
                     if (red < 0) red = 0;    
-                } else
+                } else if ("blue".equals(color))
                 {
                     alpha = colorOfPixel.getAlpha();
                     red = colorOfPixel.getRed() - value;
@@ -58,7 +58,79 @@ public class RGBFilters {
                     blue = colorOfPixel.getBlue();
                     if (red < 0) red = 0;
                     if (green < 0) green = 0;    
+                } else if ("yellow".equals(color))
+                {
+                    alpha = colorOfPixel.getAlpha();
+                    red = colorOfPixel.getRed();
+                    green = colorOfPixel.getGreen();
+                    blue = colorOfPixel.getBlue() - value;
+                    if (blue < 0) blue = 0;
+                } else if ("purple".equals(color)) 
+                {
+                    alpha = colorOfPixel.getAlpha();
+                    red = colorOfPixel.getRed();
+                    green = colorOfPixel.getGreen() - value;
+                    blue = colorOfPixel.getBlue();
+                    if (green < 0) green = 0;
+                } else if ("cyan".equals(color)) 
+                {
+                    alpha = colorOfPixel.getAlpha();
+                    red = colorOfPixel.getRed() - value;
+                    green = colorOfPixel.getGreen();
+                    blue = colorOfPixel.getBlue();
+                    if (red < 0) red = 0;
+                } else if ("white".equals(color)) 
+                {
+                    alpha = colorOfPixel.getAlpha();
+                    red = colorOfPixel.getRed() + value;
+                    green = colorOfPixel.getGreen() + value;
+                    blue = colorOfPixel.getBlue() + value;
+                    if (red > 255) red = 255;
+                    if (green > 255) green = 255;
+                    if (blue > 255) blue = 255;
+                } 
+                else if ("black".equals(color)) 
+                {
+                    alpha = colorOfPixel.getAlpha();
+                    red = colorOfPixel.getRed() - value;
+                    green = colorOfPixel.getGreen() - value;
+                    blue = colorOfPixel.getBlue() - value;
+                    if (red < 0) red = 0;
+                    if (green < 0) green = 0;
+                    if (blue < 0) blue = 0;
+                }else if ("negative".equals(color)) 
+                {
+                    alpha = colorOfPixel.getAlpha();
+                    red = 255 - colorOfPixel.getRed();
+                    green = 255 - colorOfPixel.getGreen();
+                    blue = 255 - colorOfPixel.getBlue();
+                   // if (red < 0) red = 0;
+                   // if (green < 0) green = 0;
+                   // if (blue < 0) blue = 0;
+                } else if ("greyScale".equals(color)) 
+                {
+                    alpha = colorOfPixel.getAlpha();
+                    red = (colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3;
+                    green = (colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3;
+                    blue = (colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3;
+                   // if (red < 0) red = 0;
+                   // if (green < 0) green = 0;
+                   // if (blue < 0) blue = 0;
+                } else if ("sepia".equals(color)) 
+                {
+                    alpha = colorOfPixel.getAlpha();
+                    red = ((colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3) + 2*(20+(value*20/255));
+                    green = (colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3 + (20+(value*20/255));
+                    blue = (colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3;
+                    if (red > 255) red = 255;
+                    if (green > 255) green = 255;
+                    if (blue > 255) blue = 255;
+                } else {
+                    red = -1;
+                    green = -1;
+                    blue = -1;
                 }
+                    
                 image.setRGB(j, i, new Color(red, green, blue).getRGB());
             }
         }

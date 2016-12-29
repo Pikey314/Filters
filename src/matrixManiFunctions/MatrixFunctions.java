@@ -51,14 +51,14 @@ public class MatrixFunctions {
             int green[][] = new int[image.getWidth()][image.getHeight()];
             int blue[][] = new int[image.getWidth()][image.getHeight()];
             
-            int newRed[][] = new int[image.getWidth()-2][image.getHeight()-2];
-            int newGreen[][] = new int[image.getWidth()-2][image.getHeight()-2];
-            int newBlue[][] = new int[image.getWidth()-2][image.getHeight()-2];
+            int newRed[][] = new int[image.getWidth()][image.getHeight()];
+            int newGreen[][] = new int[image.getWidth()][image.getHeight()];
+            int newBlue[][] = new int[image.getWidth()][image.getHeight()];
             
         
         
-        for (int i = 0; i < image.getWidth()-1; i++) {
-            for (int j = 0; j < image.getHeight()-1; j++) {
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
                 colorOfPixel = new Color(image.getRGB(i,j));
                 
                 
@@ -71,16 +71,124 @@ public class MatrixFunctions {
             }
         }
         
-        for (int i = 1; i < image.getWidth()-2; i++) {
-            for (int j = 1; j < image.getHeight()-2; j++) {
-                newRed[i][j] = (red[i-1][j-1]*LU + red[i-1][j]*LC + red[i-1][j+1]*LD + red[i][j-1]*CU + red[i][j]*CC + red[i][j+1]*CD + red[i+1][j-1]*RU + red[i+1][j]*RC + red[i+1][j+1]*RD);
-                newGreen[i][j] = (green[i-1][j-1]*LU + green[i-1][j]*LC + green[i-1][j+1]*LD + green[i][j-1]*CU + green[i][j]*CC + green[i][j+1]*CD + green[i+1][j-1]*RU + green[i+1][j]*RC + green[i+1][j+1]*RD);
-                newBlue[i][j] = (blue[i-1][j-1]*LU + blue[i-1][j]*LC + blue[i-1][j+1]*LD + blue[i][j-1]*CU + blue[i][j]*CC + blue[i][j+1]*CD + blue[i+1][j-1]*RU + blue[i+1][j]*RC + blue[i+1][j+1]*RD);
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
+               //lewy górny róg start
+                if (i == 0 && j == 0) {
+                    newRed[i][j] = (red[i][j]*CC + red[i][j+1]*CD + red[i+1][j]*RC + red[i+1][j+1]*RD);    
+                    newGreen[i][j] = (green[i][j]*CC + green[i][j+1]*CD + green[i+1][j]*RC + green[i+1][j+1]*RD);    
+                    newBlue[i][j] = (blue[i][j]*CC + blue[i][j+1]*CD + blue[i+1][j]*RC + blue[i+1][j+1]*RD);   
+               
+                    if ((CC + CD + RC + RD) != 0){
+                         newRed[i][j] = newRed[i][j]/(CC + CD + RC + RD);
+                         newGreen[i][j] = newGreen[i][j]/(CC + CD + RC + RD);
+                         newBlue[i][j] = newBlue[i][j]/(CC + CD + RC + RD);       
+                    }
+                }
                 
-                if (matrixSum != 0){
-                    newRed[i][j] = newRed[i][j]/matrixSum;
-                    newGreen[i][j] = newGreen[i][j]/matrixSum;
-                    newBlue[i][j] =  newBlue[i][j]/matrixSum; 
+                //lewy dolny róg start
+                if(i == 0 && j == image.getHeight()-1) {
+                    newRed[i][j] = (red[i][j]*CC + red[i][j-1]*CU + red[i+1][j]*RC + red[i+1][j-1]*RU);    
+                    newGreen[i][j] = (green[i][j]*CC + green[i][j-1]*CU + green[i+1][j]*RC + green[i+1][j-1]*RU); 
+                    newBlue[i][j] = (blue[i][j]*CC + blue[i][j-1]*CU + blue[i+1][j]*RC + blue[i+1][j-1]*RU); 
+                    
+                    if ((CC + CU + RC + RU) != 0){
+                         newRed[i][j] = newRed[i][j]/(CC + CU + RC + RU);
+                         newGreen[i][j] = newGreen[i][j]/(CC + CU + RC + RU);
+                         newBlue[i][j] = newBlue[i][j]/(CC + CU + RC + RU);
+                    }
+                } 
+                
+                //prawy górny róg start
+                if(i == image.getWidth()-1 && j == 0){
+                    newRed[i][j] = (red[i][j]*CC + red[i][j+1]*CD + red[i-1][j]*LC + red[i-1][j+1]*LD);    
+                    newGreen[i][j] = (green[i][j]*CC + green[i][j+1]*CD + green[i-1][j]*LC + green[i-1][j+1]*LD);    
+                    newBlue[i][j] = (blue[i][j]*CC + blue[i][j+1]*CD + blue[i-1][j]*LC + blue[i-1][j+1]*LD);    
+                    
+                    if ((CC + CD + LC + LD) != 0){
+                         newRed[i][j] = newRed[i][j]/(CC + CD + LC + LD);
+                         newGreen[i][j] = newGreen[i][j]/(CC + CD + LC + LD);
+                         newBlue[i][j] = newBlue[i][j]/(CC + CD + LC + LD);
+                    }
+                }
+                
+                //prawy dolny róg start
+                if(i == image.getWidth()-1 && j == image.getHeight()-1){
+                    newRed[i][j] = (red[i][j]*CC + red[i][j-1]*CU + red[i-1][j]*LC + red[i-1][j-1]*LU);    
+                    newGreen[i][j] = (green[i][j]*CC + green[i][j-1]*CU + green[i-1][j]*LC + green[i-1][j-1]*LU);     
+                    newBlue[i][j] = (blue[i][j]*CC + blue[i][j-1]*CU + blue[i-1][j]*LC + blue[i-1][j-1]*LU);   
+                    
+                    if ((CC + CU + LC + LU) != 0){
+                         newRed[i][j] = newRed[i][j]/(CC + CU + LC + LU);
+                         newGreen[i][j] = newGreen[i][j]/(CC + CU + LC + LU);
+                         newBlue[i][j] = newBlue[i][j]/(CC + CU + LC + LU);
+                    }
+                }
+                
+                //lewa krawędź
+                if (i == 0 && j > 0 && j < image.getHeight()-1){
+                    newRed[i][j] = (red[i][j-1]*CU + red[i][j]*CC + red[i][j+1]*CD + red[i+1][j-1]*RU + red[i+1][j]*RC + red[i+1][j+1]*RD);
+                    newGreen[i][j] = (green[i][j-1]*CU + green[i][j]*CC + green[i][j+1]*CD + green[i+1][j-1]*RU + green[i+1][j]*RC + green[i+1][j+1]*RD);
+                    newBlue[i][j] = (green[i][j-1]*CU + green[i][j]*CC + green[i][j+1]*CD + green[i+1][j-1]*RU + green[i+1][j]*RC + green[i+1][j+1]*RD);         
+                    
+                    if ((CU + CC + CD + RU + RC + RD) != 0){
+                         newRed[i][j] = newRed[i][j]/(CU + CC + CD + RU + RC + RD);
+                         newGreen[i][j] = newGreen[i][j]/(CU + CC + CD + RU + RC + RD);
+                         newBlue[i][j] = newBlue[i][j]/(CU + CC + CD + RU + RC + RD);
+                    }
+                }
+                
+                //prawa krawędź
+                if (i == image.getWidth()-1 && j > 0 && j < image.getHeight()-1){
+                    newRed[i][j] = (red[i-1][j-1]*LU + red[i-1][j]*LC + red[i-1][j+1]*LD + red[i][j-1]*CU + red[i][j]*CC + red[i][j+1]*CD);
+                    newGreen[i][j] = (green[i-1][j-1]*LU + green[i-1][j]*LC + green[i-1][j+1]*LD + green[i][j-1]*CU + green[i][j]*CC + green[i][j+1]*CD);
+                    newBlue[i][j] = (blue[i-1][j-1]*LU + blue[i-1][j]*LC + blue[i-1][j+1]*LD + blue[i][j-1]*CU + blue[i][j]*CC + blue[i][j+1]*CD);     
+                    
+                    if ((CU + CC + CD + LU + LC + LD) != 0){
+                         newRed[i][j] = newRed[i][j]/(CU + CC + CD + LU + LC + LD);
+                         newGreen[i][j] = newGreen[i][j]/(CU + CC + CD + LU + LC + LD);
+                         newBlue[i][j] = newBlue[i][j]/(CU + CC + CD + LU + LC + LD);
+                    }
+                }
+                
+                //górna krawędź
+                if (i > 0 && i < image.getWidth()-1 && j == 0){
+                    newRed[i][j] = (red[i-1][j]*LC + red[i-1][j+1]*LD + red[i][j]*CC + red[i][j+1]*CD + red[i+1][j]*RC + red[i+1][j+1]*RD);
+                    newGreen[i][j] = (green[i-1][j]*LC + green[i-1][j+1]*LD + green[i][j]*CC + green[i][j+1]*CD + green[i+1][j]*RC + green[i+1][j+1]*RD);
+                    newBlue[i][j] = (blue[i-1][j]*LC + blue[i-1][j+1]*LD + blue[i][j]*CC + blue[i][j+1]*CD + blue[i+1][j]*RC + blue[i+1][j+1]*RD);
+                    
+                    if ((LC + LD + CC + CD + RC + RD) != 0){
+                         newRed[i][j] = newRed[i][j]/(LC + LD + CC + CD + RC + RD);
+                         newGreen[i][j] = newGreen[i][j]/(LC + LD + CC + CD + RC + RD);
+                         newBlue[i][j] = newBlue[i][j]/(LC + LD + CC + CD + RC + RD);
+                    }                    
+                }
+                
+                //dolna krawędź
+                if (i > 0 && i < image.getWidth()-1 && j == image.getHeight()-1){
+                    newRed[i][j] = (red[i-1][j-1]*LU + red[i-1][j]*LC + red[i][j-1]*CU + red[i][j]*CC + red[i+1][j-1]*RU + red[i+1][j]*RC);
+                    newGreen[i][j] = (green[i-1][j-1]*LU + green[i-1][j]*LC + green[i][j-1]*CU + green[i][j]*CC + green[i+1][j-1]*RU + green[i+1][j]*RC);
+                    newBlue[i][j] = (blue[i-1][j-1]*LU + blue[i-1][j]*LC + blue[i][j-1]*CU + blue[i][j]*CC + blue[i+1][j-1]*RU + blue[i+1][j]*RC);
+                
+                    if ((LC + LU + CC + CU + RC + RU) != 0){
+                         newRed[i][j] = newRed[i][j]/(LC + LU + CC + CU + RC + RU);
+                         newGreen[i][j] = newGreen[i][j]/(LC + LU + CC + CU + RC + RU);
+                         newBlue[i][j] = newBlue[i][j]/(LC + LU + CC + CU + RC + RU);
+                    }   
+                }
+                
+                
+                //Srodek Start
+                if (i >= 1 && i < image.getWidth()-1 && j >= 1 && j < image.getHeight()-1) {
+                    newRed[i][j] = (red[i-1][j-1]*LU + red[i-1][j]*LC + red[i-1][j+1]*LD + red[i][j-1]*CU + red[i][j]*CC + red[i][j+1]*CD + red[i+1][j-1]*RU + red[i+1][j]*RC + red[i+1][j+1]*RD);
+                    newGreen[i][j] = (green[i-1][j-1]*LU + green[i-1][j]*LC + green[i-1][j+1]*LD + green[i][j-1]*CU + green[i][j]*CC + green[i][j+1]*CD + green[i+1][j-1]*RU + green[i+1][j]*RC + green[i+1][j+1]*RD);
+                    newBlue[i][j] = (blue[i-1][j-1]*LU + blue[i-1][j]*LC + blue[i-1][j+1]*LD + blue[i][j-1]*CU + blue[i][j]*CC + blue[i][j+1]*CD + blue[i+1][j-1]*RU + blue[i+1][j]*RC + blue[i+1][j+1]*RD);
+                
+                    if (matrixSum != 0){
+                        newRed[i][j] = newRed[i][j]/matrixSum;
+                        newGreen[i][j] = newGreen[i][j]/matrixSum;
+                        newBlue[i][j] =  newBlue[i][j]/matrixSum; 
+                    }
                 }
                 
                 if (newRed[i][j] < 0) newRed[i][j] = 0;
@@ -89,9 +197,10 @@ public class MatrixFunctions {
                 if (newRed[i][j] > 255) newRed[i][j] = 255;
                 if (newGreen[i][j] > 255) newGreen[i][j] = 255;
                 if (newBlue[i][j] > 255) newBlue[i][j] = 255;
-                
+                  
                 image.setRGB(i, j, new Color(newRed[i][j], newGreen[i][j], newBlue[i][j]).getRGB());
-            }
+                
+            }   
         }
         
         
