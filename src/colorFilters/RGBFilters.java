@@ -125,7 +125,48 @@ public class RGBFilters {
                     if (red > 255) red = 255;
                     if (green > 255) green = 255;
                     if (blue > 255) blue = 255;
-                } else {
+                } else if ("solarisation".equals(color)) 
+                {
+                    red = colorOfPixel.getRed();
+                    green = colorOfPixel.getGreen();
+                    blue = colorOfPixel.getBlue();
+                    int lightLevel = (red + green + blue)/3;
+                    if (lightLevel < value){
+                    red = 255 - colorOfPixel.getRed();
+                    green = 255 - colorOfPixel.getGreen();
+                    blue = 255 - colorOfPixel.getBlue();
+                    }
+                } else if ("gamma".equals(color)) 
+                {
+                    double aRed = ((double)colorOfPixel.getRed())/255.0;
+                    double aGreen = ((double) colorOfPixel.getGreen())/255.0;
+                    double aBlue = ((double) colorOfPixel.getBlue())/255.0;
+                    double c;
+                    c = 2.2; //wartości stałe dla urządzenia - dobre miary które znalazłem to 0.7 - przyciemnianie, 2.2 - rozjaśnianie
+                    //if (value == 0) c = 0.52;
+                    double b = 1.0/c;
+                    red = (int) (255 * Math.pow(aRed, b));
+                    green = (int) (255 * Math.pow(aGreen, b));
+                    blue = (int) (255 * Math.pow(aBlue, b));
+                    if (red > 255) red = 255;
+                    if (green > 255) green = 255;
+                    if (blue > 255) blue = 255;
+                } else if ("exposition".equals(color)) 
+                {
+                    
+                    double AIRed = (double) colorOfPixel.getRed();
+                    double AIGreen = (double) colorOfPixel.getGreen();
+                    double AIBlue = (double) colorOfPixel.getBlue();
+                    double a = Math.pow(2, value);
+                    
+                    red = (int) (AIRed*a);
+                    green = (int) (AIGreen*a);
+                    blue = (int) (AIBlue*a);
+                    if (red > 255) red = 255;
+                    if (green > 255) green = 255;
+                    if (blue > 255) blue = 255;
+                    
+                }  else {
                     red = -1;
                     green = -1;
                     blue = -1;
@@ -140,6 +181,51 @@ public class RGBFilters {
         picturePanel.removeAll();
         picturePanel.add(imageLabel);
         
+    }
+    
+    public void solarFilter(BufferedImage image, JPanel picturePanel, String color, int value, int lightLevel){
+        Color colorOfPixel;
+        
+            int alpha; 
+            int red;
+            int green;
+            int blue;
+            int argb;
+        
+        
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                colorOfPixel = new Color(image.getRGB(j,i));
+                
+                int newColorValue;
+                red = colorOfPixel.getRed();
+                green = colorOfPixel.getGreen();
+                blue = colorOfPixel.getBlue();
+                
+                if (red > lightLevel)
+                    red = 255 - red + value;
+                if (green > lightLevel)
+                    green = 255 - green + value;
+                if (blue > lightLevel)
+                    blue = 255 - blue + value;
+                  
+                if (red > 255) red = 255;
+                if (green > 255) green = 255;
+                if (blue > 255) blue = 255;
+                if (red < 0) red = 0;
+                if (green < 0) green = 0;
+                if (blue < 0) blue = 0;
+                
+                image.setRGB(j, i, new Color(red, green, blue).getRGB());
+            }
+        }
+        Image dimg = image.getScaledInstance(picturePanel.getWidth(), picturePanel.getHeight(), 4);
+        ImageIcon pic = new ImageIcon(dimg);
+        JLabel imageLabel = new JLabel(pic);
+        picturePanel.removeAll();
+        picturePanel.add(imageLabel);
+                
+                
     }
 }
 

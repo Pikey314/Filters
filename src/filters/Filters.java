@@ -68,7 +68,8 @@ public class Filters {
          args[ i+1 ] = key;    // Put the key in its proper location
      }
                  for (j = 0; j < args.length; j++)
-               System.out.println(args[j]);
+                     
+               System.out.println((255.0 * Math.pow((200/255.0), (1.0/0.9))));
                 
             }
         });
