@@ -82,7 +82,7 @@ public class OptionPanelButtons {
         });
     
         
-        test.addActionListener(new ActionListener() {
+        /*test.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                
@@ -96,7 +96,7 @@ public class OptionPanelButtons {
                 });
               mainFrame.revalidate();
             }
-        });
+        });*/
         
         green.addActionListener(new ActionListener() {
             @Override
