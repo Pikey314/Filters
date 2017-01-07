@@ -23,6 +23,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import matrixManiFunctions.MatrixFunctions;
 import matrixManiFunctions.StatisticFunctions;
+import matrixes.Matrixes5;
+import texts.AllTexts;
 
 /**
  *
@@ -197,6 +199,10 @@ public class MenuBar {
             inverting.add(gamma);
             inverting.add(exposition);
         filters.add(inverting);
+        //test
+        JMenuItem test = new JMenuItem("test");
+        filters.add(test);
+        //test END
         menuBar.add(file);
         menuBar.add(filters);
         
@@ -800,7 +806,7 @@ public class MenuBar {
         blueFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-               mainFrame.add(sideMenu.setSideMenu1Slider("Blue",0,255,177,51,1), BorderLayout.WEST);
+               mainFrame.add(sideMenu.setSideMenu1Slider("Blue",0,255,177,51,1, AllTexts.blueFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
@@ -817,7 +823,7 @@ public class MenuBar {
         greenFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-               mainFrame.add(sideMenu.setSideMenu1Slider("Green value slider", 0,255,177,51,1), BorderLayout.WEST);
+               mainFrame.add(sideMenu.setSideMenu1Slider("Green value slider", 0,255,177,51,1,AllTexts.greenFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
@@ -834,7 +840,7 @@ public class MenuBar {
         redFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-               mainFrame.add(sideMenu.setSideMenu1Slider("Red",0,255,177,51,1), BorderLayout.WEST);
+               mainFrame.add(sideMenu.setSideMenu1Slider("Red",0,255,177,51,1, AllTexts.redFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
@@ -851,7 +857,7 @@ public class MenuBar {
         yellowFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-               mainFrame.add(sideMenu.setSideMenu1Slider("Yellow value",0,255,177,51,1), BorderLayout.WEST);
+               mainFrame.add(sideMenu.setSideMenu1Slider("Yellow value",0,255,177,51,1, "a"), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
@@ -868,7 +874,7 @@ public class MenuBar {
         purpleFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-               mainFrame.add(sideMenu.setSideMenu1Slider("Choose purple value", 0,255,177,51,1), BorderLayout.WEST);
+               mainFrame.add(sideMenu.setSideMenu1Slider("Choose purple value", 1,3,2,1,1, "a"), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
@@ -885,7 +891,7 @@ public class MenuBar {
         cyanFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-               mainFrame.add(sideMenu.setSideMenu2Sliders("alfa", 0,255,177,51,1, "beta", 0,255,177,51,1), BorderLayout.WEST);
+               mainFrame.add(sideMenu.setSideMenu2Sliders("alfa", 0,255,177,51,1, "beta", 1,3,2,1,1,"a"), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
                     @Override
@@ -1009,7 +1015,15 @@ public class MenuBar {
          //for FILTERS END
         
         
-        
+        //test START
+        test.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              //undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes5.averagingMatrix, 5);
+              mainFrame.revalidate();
+            }
+        });
         
         
         

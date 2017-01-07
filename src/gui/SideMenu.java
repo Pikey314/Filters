@@ -8,6 +8,8 @@ package gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.event.ChangeEvent;
@@ -18,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -40,22 +43,29 @@ public class SideMenu {
     JTextField text2 = new JTextField(4);
     JTextField text3 = new JTextField(4);
     JPanel sidePanel = new JPanel();
-    JButton aply = new JButton("Aply");
+    JTextArea description = new JTextArea();
+    JPanel buttonPanel = new JPanel();
+    JButton aply = new JButton("Zastosuj");
     
     //slider for rgb begining = 0, end = 255, middlevalue = 177, majortTickSpacing = 51, minorTickSpacing = 1
         
-    public JPanel setSideMenu1Slider(String slidername1, int begining, int end, int beginingValue, int majorTickSpacing, int minorTickSpacing) {
+    public JPanel setSideMenu1Slider(String slidername1, int begining, int end, int beginingValue, int majorTickSpacing, int minorTickSpacing, String desc) {
         
         this.sidePanel.removeAll();
         this.sidePanel.setLayout(new BoxLayout(this.sidePanel, BoxLayout.Y_AXIS));
         
         slider1Name.setText(slidername1);
+        slider1Name.setBackground(Color.darkGray);
+        slider1Name.setForeground(Color.white);
+        slider1Name.setOpaque(true);
         
         slider1 = new JSlider(JSlider.HORIZONTAL, begining, end, beginingValue);
         slider1.setMajorTickSpacing(majorTickSpacing);
         slider1.setMinorTickSpacing(minorTickSpacing);
         slider1.setPaintTicks(true);
         slider1.setPaintLabels(true);
+        slider1.setBackground(Color.darkGray);
+        slider1.setForeground(Color.white);
 
         text1.setMaximumSize(new Dimension(1000,25));
         text1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -74,17 +84,35 @@ public class SideMenu {
         
         
         
+        buttonPanel.add(aply);
+        buttonPanel.setBackground(Color.darkGray);
+        aply.setPreferredSize(new Dimension(200,30));
+        aply.setBackground(Color.green);
+        aply.setForeground(Color.white);
+        aply.setFont(new Font("Arial", Font.BOLD, 25));
+       
+       
+        description.setText(desc);
+        description.setFont(new Font("Arial", Font.BOLD, 17));
+        description.setBackground(Color.darkGray);
+        description.setForeground(Color.WHITE);
+        description.setMargin(new Insets(10,10,10,10));
+        description.setWrapStyleWord(true);
+        description.setLineWrap(true);
+        
         this.slider1.addChangeListener(listener1);
         this.sidePanel.add(slider1Name);
         this.sidePanel.add(this.slider1);
         this.sidePanel.add(text1);
-        this.sidePanel.add(aply);
+        this.sidePanel.add(description);
+        this.sidePanel.add(buttonPanel);
         
+        this.sidePanel.setBackground(Color.darkGray);
         return this.sidePanel;
     }
     
     
-    public JPanel setSideMenu2Sliders(String slidername1, int begining1, int end1, int beginingValue1, int majorTickSpacing1, int minorTickSpacing1, String slidername2, int begining2, int end2, int beginingValue2, int majorTickSpacing2, int minorTickSpacing2) {
+    public JPanel setSideMenu2Sliders(String slidername1, int begining1, int end1, int beginingValue1, int majorTickSpacing1, int minorTickSpacing1, String slidername2, int begining2, int end2, int beginingValue2, int majorTickSpacing2, int minorTickSpacing2, String desc) {
         
         this.sidePanel.removeAll();
         this.sidePanel.setLayout(new BoxLayout(this.sidePanel, BoxLayout.Y_AXIS));
@@ -123,6 +151,13 @@ public class SideMenu {
             }
          };
         
+        buttonPanel.add(aply);
+        buttonPanel.setBackground(Color.black);
+        aply.setPreferredSize(new Dimension(200,30));
+        aply.setBackground(Color.green);
+        aply.setForeground(Color.white);
+        aply.setFont(new Font("Arial", Font.BOLD, 25));
+        
         listener2 = new ChangeListener()
          {
             @Override
@@ -133,6 +168,13 @@ public class SideMenu {
                text2.setText("" + source.getValue());
             }
          };
+        description.setText(desc);
+        description.setFont(new Font("Arial", Font.BOLD, 17));
+        description.setBackground(Color.BLACK);
+        description.setForeground(Color.WHITE);
+        description.setMargin(new Insets(10,10,10,10));
+        description.setWrapStyleWord(true);
+        description.setLineWrap(true);
         
         this.slider1.addChangeListener(listener1);
         this.slider2.addChangeListener(listener2);
@@ -142,7 +184,8 @@ public class SideMenu {
         this.sidePanel.add(slider2Name);
         this.sidePanel.add(this.slider2);
         this.sidePanel.add(text2);
-        this.sidePanel.add(aply);
+        this.sidePanel.add(description);
+        this.sidePanel.add(buttonPanel);
         
         return this.sidePanel;
     }
