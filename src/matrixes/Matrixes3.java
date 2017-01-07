@@ -5,6 +5,8 @@
  */
 package matrixes;
 
+import javax.swing.JTextField;
+
 /**
  *
  * @author Maciek P
@@ -175,4 +177,27 @@ public class Matrixes3 {
         public static int prewittVerticalMatrix[][] =   {{1,0,-1},
                                            {1,0,-1},
                                            {1,0,-1}};
+        
+        public int ownMatrix[][] = {{0,0,0},
+                                           {0,0,0},
+                                           {0,0,0}};
+        
+        
+        public void setOwnMatrix(JTextField[] textFields) {
+            for (int i = 0; i<9; i++) {
+                if (i<3)
+                    this.ownMatrix[0][i] = Integer.parseInt(textFields[i].getText());
+                else if (i>=3 && i<6)
+                    this.ownMatrix[1][i-3] = Integer.parseInt(textFields[i].getText());
+                else
+                    this.ownMatrix[2][i-6] = Integer.parseInt(textFields[i].getText());
+            }
+           System.out.println(this.ownMatrix[0][0] + " " + this.ownMatrix[0][1] + " " + this.ownMatrix[0][2] );
+           System.out.println(this.ownMatrix[1][0] + " " + this.ownMatrix[1][1] + " " + this.ownMatrix[1][2] );
+           System.out.println(this.ownMatrix[2][0] + " " + this.ownMatrix[2][1] + " " + this.ownMatrix[2][2] );
+        }
+        
+        public int[][] getOwnMatrix(){
+            return ownMatrix;
+        }
 }

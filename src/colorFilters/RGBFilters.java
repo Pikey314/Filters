@@ -22,13 +22,22 @@ public class RGBFilters {
     public void rgbFilter(BufferedImage image, JPanel picturePanel, String color, int value) {
        
         Color colorOfPixel;
+        Color colorOfPixelHistogram;
         
             int alpha; 
             int red;
             int green;
             int blue;
             int argb;
-        
+            int histogramExtendRedMax = -1;
+            int histogramExtendRedMin = -1;
+            int histogramExtendGreenMax = -1;
+            int histogramExtendGreenMin = -1;
+            int histogramExtendBlueMax = -1;
+            int histogramExtendBlueMin = -1;
+            int histogramRedTemp;
+            int histogramGreenTemp;
+            int histogramBlueTemp;
         
         for (int i = 0; i < image.getHeight(); i++) {
             for (int j = 0; j < image.getWidth(); j++) {
@@ -166,6 +175,44 @@ public class RGBFilters {
                     if (green > 255) green = 255;
                     if (blue > 255) blue = 255;
                     
+                } else if ("histogramExtend".equals(color)) 
+                {
+                    if (histogramExtendRedMax == -1 && histogramExtendRedMin == -1 && histogramExtendGreenMax == -1 && histogramExtendGreenMin == -1 && histogramExtendBlueMax == -1 && histogramExtendBlueMin == -1){
+                        for (int zz = 0; zz < image.getHeight(); zz++) {
+                            for (int xx = 0; xx < image.getWidth(); xx++) {
+                                colorOfPixelHistogram = new Color(image.getRGB(xx,zz));
+                                if (zz == 0 && xx == 0){
+                                    histogramExtendRedMax = colorOfPixelHistogram.getRed();
+                                    histogramExtendRedMin = colorOfPixelHistogram.getRed();
+                                    histogramExtendGreenMax = colorOfPixelHistogram.getGreen();
+                                    histogramExtendGreenMin = colorOfPixelHistogram.getGreen();
+                                    histogramExtendBlueMax = colorOfPixelHistogram.getBlue();
+                                    histogramExtendBlueMin = colorOfPixelHistogram.getBlue();
+                                } else {
+                                 histogramRedTemp = colorOfPixelHistogram.getRed();
+                                 histogramGreenTemp = colorOfPixelHistogram.getGreen();
+                                 histogramBlueTemp = colorOfPixelHistogram.getBlue();
+                                 
+                                 if (histogramExtendRedMax < histogramRedTemp) histogramExtendRedMax = histogramRedTemp;
+                                 if (histogramExtendRedMin > histogramRedTemp) histogramExtendRedMin = histogramRedTemp;
+                                 if (histogramExtendGreenMax < histogramGreenTemp) histogramExtendGreenMax = histogramGreenTemp;
+                                 if (histogramExtendGreenMin > histogramGreenTemp) histogramExtendGreenMin = histogramGreenTemp;
+                                 if (histogramExtendBlueMax < histogramBlueTemp) histogramExtendBlueMax = histogramBlueTemp;
+                                 if (histogramExtendBlueMin > histogramBlueTemp) histogramExtendBlueMin = histogramBlueTemp;
+                                 
+                                 
+                                 
+                                }
+                                
+                            }   
+                        }
+                    }
+                    red = (255*(colorOfPixel.getRed()-histogramExtendRedMin))/(histogramExtendRedMax - histogramExtendRedMin);
+                    green = (255*(colorOfPixel.getGreen()-histogramExtendGreenMin))/(histogramExtendGreenMax - histogramExtendGreenMin);
+                    blue = (255*(colorOfPixel.getBlue()-histogramExtendBlueMin))/(histogramExtendBlueMax - histogramExtendBlueMin);
+                    //if (red < 0) red = 0;
+                    //if (green < 0) green = 0;
+                    //if (blue < 0) blue = 0;
                 }  else {
                     red = -1;
                     green = -1;
@@ -227,5 +274,51 @@ public class RGBFilters {
                 
                 
     }
-}
 
+
+public void ownRGBFilter(BufferedImage image, JPanel picturePanel, String color, int valueRed, int valueGreen, int valueBlue) {
+       
+        Color colorOfPixel;
+        
+            int red;
+            int green;
+            int blue;
+            int argb;
+
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                colorOfPixel = new Color(image.getRGB(j,i));
+                
+                if ("ownColor".equals(color))
+                {
+                    
+                    red = colorOfPixel.getRed() + valueRed;
+                    green = colorOfPixel.getGreen() + valueGreen;
+                    blue = colorOfPixel.getBlue() + valueBlue;
+                    if (blue < 0) blue = 0;
+                    if (green < 0) green = 0;
+                    if (red < 0) red = 0;
+                    if (red > 255) red = 255;
+                    if (green > 255) green = 255;
+                    if (blue > 255) blue = 255;
+                
+                }
+                else {
+                    red = -1;
+                    green = -1;
+                    blue = -1;
+                            
+                } 
+                    
+            image.setRGB(j, i, new Color(red, green, blue).getRGB());
+            }
+        }
+        Image dimg = image.getScaledInstance(picturePanel.getWidth(), picturePanel.getHeight(), 4);
+        ImageIcon pic = new ImageIcon(dimg);
+        JLabel imageLabel = new JLabel(pic);
+        picturePanel.removeAll();
+        picturePanel.add(imageLabel);
+                
+                
+    }
+}

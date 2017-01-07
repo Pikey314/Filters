@@ -23,7 +23,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import matrixManiFunctions.MatrixFunctions;
 import matrixManiFunctions.StatisticFunctions;
+import matrixes.Matrixes3;
 import matrixes.Matrixes5;
+import matrixes.Matrixes7;
 import texts.AllTexts;
 
 /**
@@ -45,6 +47,8 @@ public class MenuBar {
     private final SideMenu sideMenu = new SideMenu();
     JPopupMenu popupMenu = new JPopupMenu("Title");
     StatisticFunctions statisticFunction = new StatisticFunctions();
+    Matrixes3 matrixes3 = new Matrixes3();
+    Matrixes5 matrixes5 = new Matrixes5();
     
     public JMenuBar setMenuBar() {
         JMenuBar menuBar = new JMenuBar();
@@ -64,12 +68,14 @@ public class MenuBar {
                 JMenuItem yellowFilter = new JMenuItem("Yellow Filter"); //filtr żółty
                 JMenuItem purpleFilter = new JMenuItem("Purple Filter"); //filtr fioletowy
                 JMenuItem cyanFilter = new JMenuItem("Cyan Filter"); //filtr cyjanowy
+                JMenuItem ownColor = new JMenuItem("Stwórz własny kolor");
             colorFilters.add(redFilter);
             colorFilters.add(greenFilter);
             colorFilters.add(blueFilter);
             colorFilters.add(yellowFilter);
             colorFilters.add(purpleFilter);
             colorFilters.add(cyanFilter);
+            colorFilters.add(ownColor);
         filters.add(colorFilters);
             JMenu brightFilters = new JMenu("Brightness Filtes");
                 JMenuItem dark = new JMenuItem("Dark Filter"); //filtr ciemny
@@ -199,9 +205,21 @@ public class MenuBar {
             inverting.add(gamma);
             inverting.add(exposition);
         filters.add(inverting);
+            JMenu histogram = new JMenu("Histogram");
+                JMenuItem rozciaganie = new JMenuItem("Rozciaganie histogramu");
+            histogram.add(rozciaganie);
+        filters.add(histogram);
+            JMenu createOwnFilters = new JMenu("Create Your Own Filter");
+                JMenuItem own3x3Filter = new JMenuItem("Create small matrix-color Filter");
+                JMenuItem own5x5Filter = new JMenuItem("Create big matrix-color Filter");
+            createOwnFilters.add(own3x3Filter);
+            createOwnFilters.add(own5x5Filter);
+        filters.add(createOwnFilters);
         //test
-        JMenuItem test = new JMenuItem("test");
+        JMenuItem test = new JMenuItem("test5");
+        JMenuItem test1 = new JMenuItem("test7");
         filters.add(test);
+        filters.add(test1);
         //test END
         menuBar.add(file);
         menuBar.add(filters);
@@ -905,6 +923,23 @@ public class MenuBar {
             }
         });
         
+        ownColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.setSideMenu3Sliders("Red", -255,255,0,100,10, "Green", -255,255,0,100,10, "Green", -255,255,0,100,10,"a"), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "ownColor", sideMenu.getTextField1Value(), sideMenu.getTextField2Value(), sideMenu.getTextField3Value());
+                    mainFrame.revalidate();
+                    }
+                });
+              mainFrame.revalidate();
+            }
+        });
+        
         bright.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -1012,6 +1047,49 @@ public class MenuBar {
                    
             }
         });
+        
+        rozciaganie.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               
+                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "histogramExtend", -2); 
+                    mainFrame.revalidate();
+                   
+            }
+        });
+        
+        own3x3Filter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.ownFilter3x3SidePanel("a"), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        matrixes3.setOwnMatrix(sideMenu.getOwnMatrix3x3());
+                        optionPanelButtons.setFunctionalityForMyFilter3x3(sideMenu.getMatrixFirst3x3Button(), mainFrame.getImageToSave(), mainFrame.getPicturePanel(), matrixes3.getOwnMatrix(), sideMenu.getTextField1Value(), sideMenu.getTextField2Value(), sideMenu.getTextField3Value());
+                    }
+                });
+               mainFrame.revalidate();
+            }
+        });
+        
+        own5x5Filter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               mainFrame.add(sideMenu.ownFilter5x5SidePanel("a"), BorderLayout.WEST);
+               sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        matrixes5.setOwnMatrix(sideMenu.getOwnMatrix5x5());
+                        optionPanelButtons.setFunctionalityForMyFilter5x5(sideMenu.getMatrixFirst5x5Button(), mainFrame.getImageToSave(), mainFrame.getPicturePanel(), matrixes5.getOwnMatrix(), sideMenu.getTextField1Value(), sideMenu.getTextField2Value(), sideMenu.getTextField3Value());
+                    }
+                });
+               mainFrame.revalidate();
+            }
+        });
          //for FILTERS END
         
         
@@ -1021,6 +1099,15 @@ public class MenuBar {
             public void actionPerformed(ActionEvent event) {
               //undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
               matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes5.averagingMatrix, 5);
+              mainFrame.revalidate();
+            }
+        });
+        
+        test1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+              //undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+              matrixFunction.matrix7x7Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes7.averagingMatrix, 7);
               mainFrame.revalidate();
             }
         });
@@ -1055,4 +1142,8 @@ public class MenuBar {
      public void setProperOptionPanelButtons(OptionPanelButtons opb) {
         this.optionPanelButtons = opb;
     }
+     
+     public UndoRedoOperations getUndoRedo(){
+         return this.undoRedo;
+     }
 }
