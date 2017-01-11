@@ -5,8 +5,8 @@
  */
 package gui;
 
-import colorFilters.HSVFilters;
-import colorFilters.RGBFilters;
+import colorModelFunctions.HSVModelFunctions;
+import colorModelFunctions.RGBModelFunctions;
 import guiOperations.FileOperations;
 import guiOperations.UndoRedoOperations;
 import java.awt.BorderLayout;
@@ -21,8 +21,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
-import matrixManiFunctions.MatrixFunctions;
-import matrixManiFunctions.StatisticFunctions;
+import matrixModelFunctions.MatrixFunctions;
+import matrixModelFunctions.StatisticFunctions;
 import matrixes.Matrixes3;
 import matrixes.Matrixes5;
 import matrixes.Matrixes7;
@@ -34,8 +34,8 @@ import texts.AllTexts;
  */
 public class MenuBar {
     
-    private final RGBFilters rgbFilters = new RGBFilters();
-    private final HSVFilters hsvFilters = new HSVFilters();
+    private final RGBModelFunctions rgbFilters = new RGBModelFunctions();
+    private final HSVModelFunctions hsvFilters = new HSVModelFunctions();
     private final ArrayList buttons = new ArrayList();
     private MainFrame mainFrame;
     UndoRedoOperations undoRedo;
@@ -771,7 +771,7 @@ public class MenuBar {
             @Override
             public void actionPerformed(ActionEvent event) {
               undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), hp1Matrix, 3);
+              matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes5.hp1Matrix, 3);
               mainFrame.revalidate();
             }
         });

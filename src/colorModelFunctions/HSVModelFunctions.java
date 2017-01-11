@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package colorFilters;
+package colorModelFunctions;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -17,7 +17,7 @@ import java.awt.image.IndexColorModel;
  *
  * @author Maciek P
  */
-public class HSVFilters {
+public class HSVModelFunctions {
     HSVconverter converter = new HSVconverter();
     
     public void hsvFilter(BufferedImage image, JPanel picturePanel, String operation, int value, int range){

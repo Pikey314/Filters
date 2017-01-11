@@ -5,7 +5,7 @@
  */
 package gui;
 
-import colorFilters.RGBFilters;
+import colorModelFunctions.RGBModelFunctions;
 import gui.MainFrame;
 import gui.OptionPanelButtons;
 import guiOperations.FileOperations;
@@ -28,11 +28,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
-import matrixManiFunctions.MatrixFunctions;
+import matrixModelFunctions.MatrixFunctions;
 
 public class OptionPanelButtons {
     
-    private RGBFilters rgbFilters = new RGBFilters();
+    private RGBModelFunctions rgbFilters = new RGBModelFunctions();
     private ArrayList buttons = new ArrayList();
     private MatrixFunctions matrixFunction = new MatrixFunctions();
     private MainFrame mainFrame;
@@ -155,11 +155,11 @@ public class OptionPanelButtons {
             public void actionPerformed(ActionEvent event) {
                 undoRedo.addToUndoList(mainFrame.getImageToSave(), getUndoButton());
                 if (jtb.isSelected()){
-                    matrixFunction.matrix3x3Funtion(image, picturePanel, matrix, 3);
-                    rgbFilters.ownRGBFilter(image, picturePanel, "ownColor", redValue, greenValue, blueValue);
+                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 3);
+                    rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
                 } else {
-                    rgbFilters.ownRGBFilter(image, picturePanel, "ownColor", redValue, greenValue, blueValue);
-                    matrixFunction.matrix3x3Funtion(image, picturePanel, matrix, 3);
+                    rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
+                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 3);
                 }
                 
                 mainFrame.revalidate();
@@ -168,6 +168,7 @@ public class OptionPanelButtons {
     }
     
     public void setFunctionalityForMyFilter5x5(JRadioButton jtb, BufferedImage image, JPanel picturePanel, int[][] matrix, int redValue, int greenValue, int blueValue){
+        
         this.myFilter2.setEnabled(true);
         this.myFilter2.removeActionListener(this.myFilter2.getActionListeners()[0]);
         this.myFilter2.addActionListener(new ActionListener() {
@@ -175,11 +176,11 @@ public class OptionPanelButtons {
             public void actionPerformed(ActionEvent event) {
                 undoRedo.addToUndoList(mainFrame.getImageToSave(), getUndoButton());
                 if (jtb.isSelected()){
-                    matrixFunction.matrix5x5Funtion(image, picturePanel, matrix, 5);
-                    rgbFilters.ownRGBFilter(image, picturePanel, "ownColor", redValue, greenValue, blueValue);
+                    matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 5);
+                    rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
                 } else {
-                    rgbFilters.ownRGBFilter(image, picturePanel, "ownColor", redValue, greenValue, blueValue);
-                    matrixFunction.matrix5x5Funtion(image, picturePanel, matrix, 5);
+                    rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
+                    matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 5);
                 }
                 
                 mainFrame.revalidate();

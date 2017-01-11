@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package colorFilters;
+package colorModelFunctions;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  *
  * @author Maciek P
  */
-public class RGBFilters {
+public class RGBModelFunctions {
     
       
     public void rgbFilter(BufferedImage image, JPanel picturePanel, String color, int value) {

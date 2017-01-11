@@ -31,6 +31,7 @@ public class FileOperations {
                 }
             }
             mainFrame.insertPicture(filePath);
+            
         }
         if (flag == JFileChooser.CANCEL_OPTION) {
             this.filename.setText("You pressed cancel");
