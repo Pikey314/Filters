@@ -42,7 +42,7 @@ extends JFrame {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
         this.picturePanel = new JPanel();
-        this.picturePanel.setBackground(Color.orange);
+        this.picturePanel.setBackground(Color.darkGray);
         //this.add(sideMenu, BorderLayout.WEST);
         this.add(this.picturePanel, BorderLayout.CENTER);
         

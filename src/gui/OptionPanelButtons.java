@@ -43,7 +43,7 @@ public class OptionPanelButtons {
     private SideMenu sideMenu = new SideMenu();
     JPopupMenu popupMenu = new JPopupMenu("Title");
     int[] rgbArray;
-    JButton undo = new JButton("undo");
+    JButton undo = new JButton("Cofnij");
     JButton myFilter1 = new JButton("Mój filtr 3x3");
     JButton myFilter2 = new JButton("Mój filtr 5x5");
     
@@ -54,9 +54,9 @@ public class OptionPanelButtons {
         
       
        
-        JButton openFile = new JButton("Open File");
-        JButton saveFile = new JButton("Save File");
-        JButton redo = new JButton("redo");
+        JButton openFile = new JButton("Otwórz Plik");
+        JButton saveFile = new JButton("Zapisz Jako");
+        JButton redo = new JButton("Ponów");
         
         myFilter1.setEnabled(false);
         myFilter2.setEnabled(false);

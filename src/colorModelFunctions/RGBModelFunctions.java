@@ -128,8 +128,8 @@ public class RGBModelFunctions {
                 } else if ("sepia".equals(color)) 
                 {
                     alpha = colorOfPixel.getAlpha();
-                    red = ((colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3) + 2*(20+(value*20/255));
-                    green = (colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3 + (20+(value*20/255));
+                    red = ((colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3) + 2*value;
+                    green = (colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3 + value;
                     blue = (colorOfPixel.getRed() + colorOfPixel.getGreen() + colorOfPixel.getBlue())/3;
                     if (red > 255) red = 255;
                     if (green > 255) green = 255;
@@ -151,7 +151,7 @@ public class RGBModelFunctions {
                     double aGreen = ((double) colorOfPixel.getGreen())/255.0;
                     double aBlue = ((double) colorOfPixel.getBlue())/255.0;
                     double c;
-                    c = 2.2; //wartości stałe dla urządzenia - dobre miary które znalazłem to 0.7 - przyciemnianie, 2.2 - rozjaśnianie
+                    c = ((double) value)/10.0; //wartości stałe dla urządzenia - dobre miary które znalazłem to 0.7 - przyciemnianie, 2.2 - rozjaśnianie
                     //if (value == 0) c = 0.52;
                     double b = 1.0/c;
                     red = (int) (255 * Math.pow(aRed, b));

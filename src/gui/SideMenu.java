@@ -72,12 +72,15 @@ public class SideMenu {
         
         text1.setMaximumSize(new Dimension(1000,25));
         text1.setHorizontalAlignment(SwingConstants.CENTER);
+        text1.setEditable(false);
         
         text2.setMaximumSize(new Dimension(1000,25));
         text2.setHorizontalAlignment(SwingConstants.CENTER);
+        text2.setEditable(false);
        
         text3.setMaximumSize(new Dimension(1000,25));
         text3.setHorizontalAlignment(SwingConstants.CENTER);
+        text3.setEditable(false);
         
         buttonPanel.setBackground(Color.darkGray);
         
@@ -96,6 +99,8 @@ public class SideMenu {
         matrixFirst3x3.setBackground(Color.darkGray);
         matrixFirst3x3.setForeground(Color.white);
         
+        matrixFirst5x5.setBackground(Color.darkGray);
+        matrixFirst5x5.setForeground(Color.white);
         sidePanel.setBackground(Color.darkGray);
     }
     
@@ -148,14 +153,9 @@ public class SideMenu {
        // aply.setForeground(Color.white);
        // aply.setFont(new Font("Arial", Font.BOLD, 25));
        
-       
+        description.removeAll();
         description.setText(desc);
-       // description.setFont(new Font("Arial", Font.BOLD, 17));
-       // description.setBackground(Color.darkGray);
-       // description.setForeground(Color.WHITE);
-       // description.setMargin(new Insets(10,10,10,10));
-       // description.setWrapStyleWord(true);
-       // description.setLineWrap(true);
+
         
         this.slider1.addChangeListener(listener1);
         this.sidePanel.add(slider1Name);
@@ -165,6 +165,8 @@ public class SideMenu {
         this.sidePanel.add(buttonPanel);
         
         this.sidePanel.setBackground(Color.darkGray);
+        description.revalidate();
+        description.repaint();
         return this.sidePanel;
     }
     
@@ -182,19 +184,23 @@ public class SideMenu {
         slider1.setMinorTickSpacing(minorTickSpacing1);
         slider1.setPaintTicks(true);
         slider1.setPaintLabels(true);
+        slider1.setBackground(Color.darkGray);
+        slider1.setForeground(Color.white);
         
         slider2 = new JSlider(JSlider.HORIZONTAL, begining2, end2, beginingValue2);
         slider2.setMajorTickSpacing(majorTickSpacing2);
         slider2.setMinorTickSpacing(minorTickSpacing2);
         slider2.setPaintTicks(true);
         slider2.setPaintLabels(true);
+        slider2.setBackground(Color.darkGray);
+        slider2.setForeground(Color.white);
 
-        text1.setMaximumSize(new Dimension(1000,30));
-        text1.setHorizontalAlignment(SwingConstants.CENTER);
+        //text1.setMaximumSize(new Dimension(1000,30));
+        //text1.setHorizontalAlignment(SwingConstants.CENTER);
         text1.setText(Integer.toString(beginingValue1));
         
-        text2.setMaximumSize(new Dimension(1000,30));
-        text2.setHorizontalAlignment(SwingConstants.CENTER);
+        //text2.setMaximumSize(new Dimension(1000,30));
+        //text2.setHorizontalAlignment(SwingConstants.CENTER);
         text2.setText(Integer.toString(beginingValue2));
         
         listener1 = new ChangeListener()
@@ -209,11 +215,11 @@ public class SideMenu {
          };
         
         buttonPanel.add(aply);
-        buttonPanel.setBackground(Color.black);
-        aply.setPreferredSize(new Dimension(200,30));
-        aply.setBackground(Color.green);
-        aply.setForeground(Color.white);
-        aply.setFont(new Font("Arial", Font.BOLD, 25));
+       // buttonPanel.setBackground(Color.black);
+       // aply.setPreferredSize(new Dimension(200,30));
+       // aply.setBackground(Color.green);
+       // aply.setForeground(Color.white);
+       // aply.setFont(new Font("Arial", Font.BOLD, 25));
         
         listener2 = new ChangeListener()
          {
@@ -225,13 +231,14 @@ public class SideMenu {
                text2.setText("" + source.getValue());
             }
          };
+        description.removeAll();
         description.setText(desc);
-        description.setFont(new Font("Arial", Font.BOLD, 17));
-        description.setBackground(Color.BLACK);
-        description.setForeground(Color.WHITE);
-        description.setMargin(new Insets(10,10,10,10));
-        description.setWrapStyleWord(true);
-        description.setLineWrap(true);
+       // description.setFont(new Font("Arial", Font.BOLD, 17));
+       // description.setBackground(Color.BLACK);
+       // description.setForeground(Color.WHITE);
+       // description.setMargin(new Insets(10,10,10,10));
+       // description.setWrapStyleWord(true);
+       // description.setLineWrap(true);
         
         this.slider1.addChangeListener(listener1);
         this.slider2.addChangeListener(listener2);
@@ -244,6 +251,8 @@ public class SideMenu {
         this.sidePanel.add(description);
         this.sidePanel.add(buttonPanel);
         
+        description.revalidate();
+        description.repaint();
         return this.sidePanel;
     }
     
@@ -261,29 +270,35 @@ public class SideMenu {
         slider1.setMinorTickSpacing(minorTickSpacing1);
         slider1.setPaintTicks(true);
         slider1.setPaintLabels(true);
+        slider1.setBackground(Color.darkGray);
+        slider1.setForeground(Color.white);
         
         slider2 = new JSlider(JSlider.HORIZONTAL, begining2, end2, beginingValue2);
         slider2.setMajorTickSpacing(majorTickSpacing2);
         slider2.setMinorTickSpacing(minorTickSpacing2);
         slider2.setPaintTicks(true);
         slider2.setPaintLabels(true);
+        slider2.setBackground(Color.darkGray);
+        slider2.setForeground(Color.white);
         
         slider3 = new JSlider(JSlider.HORIZONTAL, begining3, end3, beginingValue3);
         slider3.setMajorTickSpacing(majorTickSpacing3);
         slider3.setMinorTickSpacing(minorTickSpacing3);
         slider3.setPaintTicks(true);
         slider3.setPaintLabels(true);
+        slider3.setBackground(Color.darkGray);
+        slider3.setForeground(Color.white);
 
-        text1.setMaximumSize(new Dimension(1000,30));
-        text1.setHorizontalAlignment(SwingConstants.CENTER);
+        //text1.setMaximumSize(new Dimension(1000,30));
+        //text1.setHorizontalAlignment(SwingConstants.CENTER);
         text1.setText(Integer.toString(beginingValue1));
         
-        text2.setMaximumSize(new Dimension(1000,30));
-        text2.setHorizontalAlignment(SwingConstants.CENTER);
+        //text2.setMaximumSize(new Dimension(1000,30));
+        //text2.setHorizontalAlignment(SwingConstants.CENTER);
         text2.setText(Integer.toString(beginingValue2));
         
-        text3.setMaximumSize(new Dimension(1000,30));
-        text3.setHorizontalAlignment(SwingConstants.CENTER);
+        //text3.setMaximumSize(new Dimension(1000,30));
+        //text3.setHorizontalAlignment(SwingConstants.CENTER);
         text3.setText(Integer.toString(beginingValue3));
         
         listener1 = new ChangeListener()
@@ -298,11 +313,11 @@ public class SideMenu {
          };
         
         buttonPanel.add(aply);
-        buttonPanel.setBackground(Color.black);
-        aply.setPreferredSize(new Dimension(200,30));
-        aply.setBackground(Color.green);
-        aply.setForeground(Color.white);
-        aply.setFont(new Font("Arial", Font.BOLD, 25));
+        //buttonPanel.setBackground(Color.black);
+        //aply.setPreferredSize(new Dimension(200,30));
+        //aply.setBackground(Color.green);
+        //aply.setForeground(Color.white);
+        //aply.setFont(new Font("Arial", Font.BOLD, 25));
         
         listener2 = new ChangeListener()
          {
@@ -314,13 +329,14 @@ public class SideMenu {
                text2.setText("" + source.getValue());
             }
          };
+        description.removeAll();
         description.setText(desc);
-        description.setFont(new Font("Arial", Font.BOLD, 17));
-        description.setBackground(Color.BLACK);
-        description.setForeground(Color.WHITE);
-        description.setMargin(new Insets(10,10,10,10));
-        description.setWrapStyleWord(true);
-        description.setLineWrap(true);
+        //description.setFont(new Font("Arial", Font.BOLD, 17));
+        //description.setBackground(Color.BLACK);
+        //description.setForeground(Color.WHITE);
+        //description.setMargin(new Insets(10,10,10,10));
+        //description.setWrapStyleWord(true);
+        //description.setLineWrap(true);
         
         listener3 = new ChangeListener()
          {
@@ -348,6 +364,8 @@ public class SideMenu {
         this.sidePanel.add(description);
         this.sidePanel.add(buttonPanel);
         
+        description.revalidate();
+        description.repaint();
         return this.sidePanel;
     }
     
@@ -356,38 +374,44 @@ public class SideMenu {
         this.sidePanel.removeAll();
         this.sidePanel.setLayout(new BoxLayout(this.sidePanel, BoxLayout.Y_AXIS));
         
-        slider1Name.setText("Red Value");
-        slider2Name.setText("Green Value");
-        slider3Name.setText("Blue Value");
+        slider1Name.setText("Czerwony");
+        slider2Name.setText("Zielony");
+        slider3Name.setText("Niebieski");
         
         slider1 = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
         slider1.setMajorTickSpacing(100);
         slider1.setMinorTickSpacing(10);
         slider1.setPaintTicks(true);
         slider1.setPaintLabels(true);
+        slider1.setBackground(Color.darkGray);
+        slider1.setForeground(Color.white);
         
         slider2 = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
         slider2.setMajorTickSpacing(100);
         slider2.setMinorTickSpacing(10);
         slider2.setPaintTicks(true);
         slider2.setPaintLabels(true);
+        slider2.setBackground(Color.darkGray);
+        slider2.setForeground(Color.white);
         
         slider3 = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
         slider3.setMajorTickSpacing(100);
         slider3.setMinorTickSpacing(10);
         slider3.setPaintTicks(true);
         slider3.setPaintLabels(true);
+        slider3.setBackground(Color.darkGray);
+        slider3.setForeground(Color.white);
 
-        text1.setMaximumSize(new Dimension(1000,30));
-        text1.setHorizontalAlignment(SwingConstants.CENTER);
+        //text1.setMaximumSize(new Dimension(1000,30));
+        //text1.setHorizontalAlignment(SwingConstants.CENTER);
         text1.setText(Integer.toString(0));
         
-        text2.setMaximumSize(new Dimension(1000,30));
-        text2.setHorizontalAlignment(SwingConstants.CENTER);
+        //text2.setMaximumSize(new Dimension(1000,30));
+        //text2.setHorizontalAlignment(SwingConstants.CENTER);
         text2.setText(Integer.toString(0));
         
-        text3.setMaximumSize(new Dimension(1000,30));
-        text3.setHorizontalAlignment(SwingConstants.CENTER);
+        //text3.setMaximumSize(new Dimension(1000,30));
+       // text3.setHorizontalAlignment(SwingConstants.CENTER);
         text3.setText(Integer.toString(0));
         
         listener1 = new ChangeListener()
@@ -402,11 +426,11 @@ public class SideMenu {
          };
         
         buttonPanel.add(aply);
-        buttonPanel.setBackground(Color.black);
-        aply.setPreferredSize(new Dimension(200,30));
-        aply.setBackground(Color.green);
-        aply.setForeground(Color.white);
-        aply.setFont(new Font("Arial", Font.BOLD, 25));
+        //buttonPanel.setBackground(Color.black);
+        //aply.setPreferredSize(new Dimension(200,30));
+        //aply.setBackground(Color.green);
+        //aply.setForeground(Color.white);
+        //aply.setFont(new Font("Arial", Font.BOLD, 25));
         
         listener2 = new ChangeListener()
          {
@@ -418,13 +442,14 @@ public class SideMenu {
                text2.setText("" + source.getValue());
             }
          };
+        description.removeAll();
         description.setText(desc);
-        description.setFont(new Font("Arial", Font.BOLD, 17));
-        description.setBackground(Color.BLACK);
-        description.setForeground(Color.WHITE);
-        description.setMargin(new Insets(10,10,10,10));
-        description.setWrapStyleWord(true);
-        description.setLineWrap(true);
+        //description.setFont(new Font("Arial", Font.BOLD, 17));
+       // description.setBackground(Color.BLACK);
+       // description.setForeground(Color.WHITE);
+       // description.setMargin(new Insets(10,10,10,10));
+       // description.setWrapStyleWord(true);
+       // description.setLineWrap(true);
         
         listener3 = new ChangeListener()
          {
@@ -478,6 +503,8 @@ public class SideMenu {
         this.sidePanel.add(description);
         this.sidePanel.add(buttonPanel);
         
+        description.revalidate();
+        description.repaint();
         return this.sidePanel;
     }
     
@@ -489,26 +516,29 @@ public class SideMenu {
         
         
         buttonPanel.add(aply);
-        buttonPanel.setBackground(Color.darkGray);
-        aply.setPreferredSize(new Dimension(200,30));
-        aply.setBackground(Color.green);
-        aply.setForeground(Color.white);
-        aply.setFont(new Font("Arial", Font.BOLD, 25));
+       // buttonPanel.setBackground(Color.darkGray);
+       // aply.setPreferredSize(new Dimension(200,30));
+       // aply.setBackground(Color.green);
+      //  aply.setForeground(Color.white);
+      //  aply.setFont(new Font("Arial", Font.BOLD, 25));
        
-       
+        //description.remove
+        description.removeAll();
         description.setText(desc);
-        description.setFont(new Font("Arial", Font.BOLD, 17));
-        description.setBackground(Color.darkGray);
-        description.setForeground(Color.WHITE);
-        description.setMargin(new Insets(10,10,10,10));
-        description.setWrapStyleWord(true);
-        description.setLineWrap(true);
-        
+       // description.setFont(new Font("Arial", Font.BOLD, 17));
+       // description.setBackground(Color.darkGray);
+        //description.setForeground(Color.WHITE);
+       // description.setMargin(new Insets(10,10,10,10));
+       // description.setWrapStyleWord(true);
+       // description.setLineWrap(true);
+       // 
        
         this.sidePanel.add(description);
         this.sidePanel.add(buttonPanel);
         
-        this.sidePanel.setBackground(Color.darkGray);
+       // this.sidePanel.setBackground(Color.darkGray);
+        description.revalidate();
+        description.repaint();
         return this.sidePanel;
     }
     
@@ -518,38 +548,45 @@ public class SideMenu {
         this.sidePanel.removeAll();
         this.sidePanel.setLayout(new BoxLayout(this.sidePanel, BoxLayout.Y_AXIS));
         
-        slider1Name.setText("Red Value");
-        slider2Name.setText("Green Value");
-        slider3Name.setText("Blue Value");
+        slider1Name.setText("Czerwony");
+        slider2Name.setText("Zielony");
+        slider3Name.setText("Niebieski");
         
         slider1 = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
         slider1.setMajorTickSpacing(100);
         slider1.setMinorTickSpacing(10);
         slider1.setPaintTicks(true);
         slider1.setPaintLabels(true);
+        slider1.setBackground(Color.darkGray);
+        slider1.setForeground(Color.white);
+        
         
         slider2 = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
         slider2.setMajorTickSpacing(100);
         slider2.setMinorTickSpacing(10);
         slider2.setPaintTicks(true);
         slider2.setPaintLabels(true);
+        slider2.setBackground(Color.darkGray);
+        slider2.setForeground(Color.white);
         
         slider3 = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
         slider3.setMajorTickSpacing(100);
         slider3.setMinorTickSpacing(10);
         slider3.setPaintTicks(true);
         slider3.setPaintLabels(true);
+        slider3.setBackground(Color.darkGray);
+        slider3.setForeground(Color.white);
 
-        text1.setMaximumSize(new Dimension(1000,30));
-        text1.setHorizontalAlignment(SwingConstants.CENTER);
+        //text1.setMaximumSize(new Dimension(1000,30));
+       // text1.setHorizontalAlignment(SwingConstants.CENTER);
         text1.setText(Integer.toString(0));
         
-        text2.setMaximumSize(new Dimension(1000,30));
-        text2.setHorizontalAlignment(SwingConstants.CENTER);
+       // text2.setMaximumSize(new Dimension(1000,30));
+       // text2.setHorizontalAlignment(SwingConstants.CENTER);
         text2.setText(Integer.toString(0));
         
-        text3.setMaximumSize(new Dimension(1000,30));
-        text3.setHorizontalAlignment(SwingConstants.CENTER);
+       // text3.setMaximumSize(new Dimension(1000,30));
+       // text3.setHorizontalAlignment(SwingConstants.CENTER);
         text3.setText(Integer.toString(0));
         
         listener1 = new ChangeListener()
@@ -564,11 +601,11 @@ public class SideMenu {
          };
         
         buttonPanel.add(aply);
-        buttonPanel.setBackground(Color.black);
-        aply.setPreferredSize(new Dimension(200,30));
-        aply.setBackground(Color.green);
-        aply.setForeground(Color.white);
-        aply.setFont(new Font("Arial", Font.BOLD, 25));
+       // buttonPanel.setBackground(Color.black);
+       // aply.setPreferredSize(new Dimension(200,30));
+       // aply.setBackground(Color.green);
+       // aply.setForeground(Color.white);
+       // aply.setFont(new Font("Arial", Font.BOLD, 25));
         
         listener2 = new ChangeListener()
          {
@@ -580,13 +617,14 @@ public class SideMenu {
                text2.setText("" + source.getValue());
             }
          };
+        description.removeAll();
         description.setText(desc);
-        description.setFont(new Font("Arial", Font.BOLD, 17));
-        description.setBackground(Color.BLACK);
-        description.setForeground(Color.WHITE);
-        description.setMargin(new Insets(10,10,10,10));
-        description.setWrapStyleWord(true);
-        description.setLineWrap(true);
+       // description.setFont(new Font("Arial", Font.BOLD, 17));
+       // description.setBackground(Color.BLACK);
+       // description.setForeground(Color.WHITE);
+       // description.setMargin(new Insets(10,10,10,10));
+       // description.setWrapStyleWord(true);
+       // description.setLineWrap(true);
         
         listener3 = new ChangeListener()
          {
@@ -661,6 +699,8 @@ public class SideMenu {
         this.sidePanel.add(description);
         this.sidePanel.add(buttonPanel);
         
+        description.revalidate();
+        description.repaint();
         return this.sidePanel;
     }
     
