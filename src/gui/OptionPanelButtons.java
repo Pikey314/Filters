@@ -6,53 +6,32 @@
 package gui;
 
 import colorModelFunctions.RGBModelFunctions;
-import gui.MainFrame;
-import gui.OptionPanelButtons;
 import guiOperations.FileOperations;
 import guiOperations.UndoRedoOperations;
-import java.awt.BorderLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 import matrixModelFunctions.MatrixFunctions;
 
 public class OptionPanelButtons {
     
-    private RGBModelFunctions rgbFilters = new RGBModelFunctions();
-    private ArrayList buttons = new ArrayList();
-    private MatrixFunctions matrixFunction = new MatrixFunctions();
+    private final RGBModelFunctions rgbFilters = new RGBModelFunctions();
+    private final ArrayList buttons = new ArrayList();
+    private final MatrixFunctions matrixFunction = new MatrixFunctions();
+    private FileOperations fileOperations = new FileOperations();
+    private JButton undo = new JButton("Cofnij");
+    private final JButton myFilter1 = new JButton("Mój Filtr 3x3");
+    private final JButton myFilter2 = new JButton("Mój Filtr 5x5");
     private MainFrame mainFrame;
-    UndoRedoOperations undoRedo;
-    private JTextField filename = new JTextField();
-    private JTextField dir = new JTextField();
-    FileOperations fileOperations = new FileOperations();
-    private SideMenu sideMenu = new SideMenu();
-    JPopupMenu popupMenu = new JPopupMenu("Title");
-    int[] rgbArray;
-    JButton undo = new JButton("Cofnij");
-    JButton myFilter1 = new JButton("Mój filtr 3x3");
-    JButton myFilter2 = new JButton("Mój filtr 5x5");
-    
+    private UndoRedoOperations undoRedo;
 
     public OptionPanelButtons() {
-       
-        
-        
-      
        
         JButton openFile = new JButton("Otwórz Plik");
         JButton saveFile = new JButton("Zapisz Jako");
@@ -63,27 +42,17 @@ public class OptionPanelButtons {
         
         redo.setEnabled(false);
         undo.setEnabled(false);
-         int a[][] = {{1,0,-1},
-                     {1,0,-1},
-                     {1,0,-1}};
         
         
-    //   RGB.setComponentPopupMenu(popupMenu);
-        undo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-             undoRedo.setProperMainFrame(mainFrame);
-              undoRedo.undo(mainFrame.getImageToSave(), redo, undo);
-            }
+        undo.addActionListener((ActionEvent event) -> {
+            undoRedo.setProperMainFrame(mainFrame);
+            undoRedo.undo(mainFrame.getImageToSave(), redo, undo);
         });
         
-        redo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                undoRedo.setProperMainFrame(mainFrame);
-              undoRedo.redo(mainFrame.getImageToSave(), undo);
-              redo.setEnabled(false);
-            }
+        redo.addActionListener((ActionEvent event) -> {
+            undoRedo.setProperMainFrame(mainFrame);
+            undoRedo.redo(mainFrame.getImageToSave(), undo);
+            redo.setEnabled(false);
         });
     
         
@@ -93,26 +62,17 @@ public class OptionPanelButtons {
         myFilter2.addActionListener((ActionEvent event) -> {
         });
         
-        openFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                fileOperations.openFile(mainFrame);
-            }
+        openFile.addActionListener((ActionEvent event) -> {
+            fileOperations.openFile(mainFrame);
         });
         
-        saveFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    fileOperations.saveFile(mainFrame);
-                } catch (IOException ex) {
-                    Logger.getLogger(OptionPanelButtons.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        saveFile.addActionListener((ActionEvent event) -> {
+            try {
+                fileOperations.saveFile(mainFrame);
+            } catch (IOException ex) {
+                Logger.getLogger(OptionPanelButtons.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
-        
-        
         
         this.buttons.add(undo);
         this.buttons.add(redo);
@@ -150,20 +110,17 @@ public class OptionPanelButtons {
     public void setFunctionalityForMyFilter3x3(JRadioButton jtb, BufferedImage image, JPanel picturePanel, int[][] matrix, int redValue, int greenValue, int blueValue){
         this.myFilter1.setEnabled(true);
         this.myFilter1.removeActionListener(this.myFilter1.getActionListeners()[0]);
-        this.myFilter1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                undoRedo.addToUndoList(mainFrame.getImageToSave(), getUndoButton());
-                if (jtb.isSelected()){
-                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 3);
-                    rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
-                } else {
-                    rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
-                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 3);
-                }
-                
-                mainFrame.revalidate();
+        this.myFilter1.addActionListener((ActionEvent event) -> {
+            undoRedo.addToUndoList(mainFrame.getImageToSave(), getUndoButton());
+            if (jtb.isSelected()){
+                matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 3);
+                rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
+            } else {
+                rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
+                matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 3);
             }
+            
+            mainFrame.revalidate();
         });
     }
     
@@ -171,22 +128,17 @@ public class OptionPanelButtons {
         
         this.myFilter2.setEnabled(true);
         this.myFilter2.removeActionListener(this.myFilter2.getActionListeners()[0]);
-        this.myFilter2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                undoRedo.addToUndoList(mainFrame.getImageToSave(), getUndoButton());
-                if (jtb.isSelected()){
-                    matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 5);
-                    rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
-                } else {
-                    rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
-                    matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 5);
-                }
-                
-                mainFrame.revalidate();
+        this.myFilter2.addActionListener((ActionEvent event) -> {
+            undoRedo.addToUndoList(mainFrame.getImageToSave(), getUndoButton());
+            if (jtb.isSelected()){
+                matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 5);
+                rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
+            } else {
+                rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), picturePanel, "ownColor", redValue, greenValue, blueValue);
+                matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), picturePanel, matrix, 5);
             }
+            
+            mainFrame.revalidate();
         });
     }
 }
-
-//asadas

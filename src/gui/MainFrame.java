@@ -8,28 +8,17 @@ package gui;
 import guiOperations.ImageOperations;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 
-public class MainFrame
-extends JFrame {
+public class MainFrame extends JFrame {
     private JPanel picturePanel;
     private BufferedImage imageToSave;
-    private ImageOperations Image = new ImageOperations();
+    private final ImageOperations Image = new ImageOperations();
     private int applicationWidth = 800;
     private int applicationHeight = 800;
-    private JSlider slider;
-    private JPanel sideMenu = new JPanel();
 
     public MainFrame(String name) {
         super(name);
@@ -43,7 +32,6 @@ extends JFrame {
         this.setLayout(new BorderLayout());
         this.picturePanel = new JPanel();
         this.picturePanel.setBackground(Color.darkGray);
-        //this.add(sideMenu, BorderLayout.WEST);
         this.add(this.picturePanel, BorderLayout.CENTER);
         
     }

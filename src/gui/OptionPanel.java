@@ -9,15 +9,12 @@ package gui;
 import guiOperations.UndoRedoOperations;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 public class OptionPanel extends JPanel {
     private final OptionPanelButtons buttons = new OptionPanelButtons();
-    private int optionPanelWidth;
-    private int optionPanelHeight;
-    MenuBar menu = new MenuBar();
-    JPanel buttonPanel = new JPanel();
+    private final MenuBar menu = new MenuBar();
+    private final JPanel buttonPanel = new JPanel();
 
     public OptionPanel(MainFrame mF, UndoRedoOperations ur) {
         buttonPanel.setBackground(Color.DARK_GRAY);

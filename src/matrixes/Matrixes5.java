@@ -114,12 +114,7 @@ public class Matrixes5 {
                 else
                     this.ownMatrix[4][i-20] = Integer.parseInt(textFields[i].getText());
             }
-           System.out.println(this.ownMatrix[0][0] + " " + this.ownMatrix[0][1] + " " + this.ownMatrix[0][2] + " " + this.ownMatrix[0][3] + " " + this.ownMatrix[0][4]  );
-           System.out.println(this.ownMatrix[1][0] + " " + this.ownMatrix[1][1] + " " + this.ownMatrix[1][2] + " " + this.ownMatrix[1][3] + " " + this.ownMatrix[1][4]  );
-           System.out.println(this.ownMatrix[2][0] + " " + this.ownMatrix[2][1] + " " + this.ownMatrix[2][2] + " " + this.ownMatrix[2][3] + " " + this.ownMatrix[2][4]  );
-           System.out.println(this.ownMatrix[3][0] + " " + this.ownMatrix[3][1] + " " + this.ownMatrix[3][2] + " " + this.ownMatrix[3][3] + " " + this.ownMatrix[3][4]  );
-           System.out.println(this.ownMatrix[4][0] + " " + this.ownMatrix[4][1] + " " + this.ownMatrix[4][2] + " " + this.ownMatrix[4][3] + " " + this.ownMatrix[4][4]  );
-        }
+       }
         
         public int[][] getOwnMatrix(){
             return ownMatrix;

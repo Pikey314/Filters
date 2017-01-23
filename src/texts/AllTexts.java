@@ -96,7 +96,10 @@ public class AllTexts {
     public static String minimalFilterText = "Filtr Minimalny\n\nFiltr powoduje efekt farby olejnej\n\nWybierz moc za pomocą suwaka\n\nWciśnij przycisk 'Zastosuj' aby zaobserwować zmiany";
     
     
-    public static String accentFilterText = "Filtr Usuwający Kolor\n\nFiltr sprowadza wybrane kolory do odcienia szarości\n\nZa pomocą suwaków zdecyduj które kolory mają pozostać nienaruszone\n\nWciśnij przycisk 'Zastosuj' aby zaobserwować zmiany";
+    public static String accentFilterText = "Filtr Usuwający Kolor (HSV)\n\nFiltr sprowadza wybrane kolory do odcienia szarości\n\nZa pomocą suwaków zdecyduj które kolory mają pozostać nienaruszone\n\nWciśnij przycisk 'Zastosuj' aby zaobserwować zmiany";
+    public static String colorHSVFilterText = "Filtr Zmieniający Kolor (HSV)\n\nFiltr zmieniający kolory (operując na modelu barw HSV)\n\nZa pomocą suwaka zmień wartość składowej H - Barwa\n\nWciśnij przycisk 'Zastosuj' aby zaobserwować zmiany";
+    public static String saturationFilterText = "Filtr Zmieniający Nasycenie (HSV)\n\nFiltr zmieniający nasycenie (operując na modelu barw HSV)\n\nZa pomocą suwaka zmień wartość składowej S - Nasycenie\n\nWciśnij przycisk 'Zastosuj' aby zaobserwować zmiany";
+    public static String lightFilterText = "Filtr Zmeiniający Jasność (HSV)\n\nFiltr zmieniający jasność obrazu (operując na modelu barw HSV)\n\nZa pomocą suwaka zmień wartość składowej V - Wartość Jasności\n\nWciśnij przycisk 'Zastosuj' aby zaobserwować zmiany";
 
     public static String histogramExtendFilterText = "Filtr Rozciągający Histogram\n\nFiltr zależny od najmniejszego i największego koloru w obrazie\n\nWciśnij przycisk 'Zastosuj' aby zaobserwować zmiany";
 
@@ -105,7 +108,8 @@ public class AllTexts {
 
     public static String solarisationFilterText = "Filtr Solaryzacyjny\n\nFiltr wprowadzający efekt solaryzacji na obraz\n\nZa pomocą suwaka wybierz poziom jasności\n\nWciśnij przycisk 'Zastosuj' aby zaobserwować zmiany";
 
-    public static String own3x3FilterText = "Filtr Własny Mały\n\nZdefiniuj swój własny filtr\n\nZa pomocą suwaków dostosuj kolory\n\nUzupełnij macierz liczbami całkowitymi\n\nWciśnięcie przycisku 'Zastosuj' przypisze filtr do przycisku 'Mój Filtr 1'";
-    public static String own5x5FilterText = "Filtr Własny Duży\n\nZdefiniuj swój własny filtr\n\nZa pomocą suwaków dostosuj kolory\n\nUzupełnij macierz liczbami całkowitymi\n\nWciśnięcie przycisku 'Zastosuj' przypisze filtr do przycisku 'Mój Filtr 2'";
+    public static String own3x3FilterText = "Filtr Własny Mały\n\nZdefiniuj swój własny filtr\n\nZa pomocą suwaków dostosuj kolory\n\nUzupełnij macierz liczbami całkowitymi\n\nWciśnięcie przycisku 'Zastosuj' przypisze filtr do przycisku 'Mój Filtr 3x3'";
+    public static String own5x5FilterText = "Filtr Własny Duży\n\nZdefiniuj swój własny filtr\n\nZa pomocą suwaków dostosuj kolory\n\nUzupełnij macierz liczbami całkowitymi\n\nWciśnięcie przycisku 'Zastosuj' przypisze filtr do przycisku 'Mój Filtr 5x5'";
+    
     
 }   

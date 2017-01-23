@@ -6,16 +6,12 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -35,25 +31,25 @@ public class SideMenu {
     private ChangeListener listener1;
     private ChangeListener listener2;
     private ChangeListener listener3;
-    JLabel slider1Name = new JLabel();
-    JLabel slider2Name = new JLabel();
-    JLabel slider3Name = new JLabel();
-    JSlider slider1;
-    JSlider slider2;
-    JSlider slider3;
-    JTextField text1 = new JTextField(4);
-    JTextField text2 = new JTextField(4);
-    JTextField text3 = new JTextField(4);
-    JPanel sidePanel = new JPanel();
-    JTextArea description = new JTextArea();
-    JPanel buttonPanel = new JPanel();
-    JButton aply = new JButton("Zastosuj");
-    JPanel matrixPanel3x3 = new JPanel();
-    JTextField textForMatrix3x3[] = new JTextField[9];
-    JRadioButton matrixFirst3x3 = new JRadioButton("Matrix Filter first");
-    JPanel matrixPanel5x5 = new JPanel();
-    JTextField textForMatrix5x5[] = new JTextField[25];
-    JRadioButton matrixFirst5x5 = new JRadioButton("Matrix Filter first");
+    private final JLabel slider1Name = new JLabel();
+    private final JLabel slider2Name = new JLabel();
+    private final JLabel slider3Name = new JLabel();
+    private JSlider slider1;
+    private JSlider slider2;
+    private JSlider slider3;
+    private final JTextField text1 = new JTextField(4);
+    private final JTextField text2 = new JTextField(4);
+    private final JTextField text3 = new JTextField(4);
+    private final JPanel sidePanel = new JPanel();
+    private final JTextArea description = new JTextArea();
+    private final JPanel buttonPanel = new JPanel();
+    private final JButton aply = new JButton("Zastosuj");
+    private final JPanel matrixPanel3x3 = new JPanel();
+    private final JTextField textForMatrix3x3[] = new JTextField[9];
+    private final JRadioButton matrixFirst3x3 = new JRadioButton("Najpierw Macierz");
+    private final JPanel matrixPanel5x5 = new JPanel();
+    private final JTextField textForMatrix5x5[] = new JTextField[25];
+    private final JRadioButton matrixFirst5x5 = new JRadioButton("Najpierw Macierz");
     
     public SideMenu () {
         slider1Name.setBackground(Color.darkGray);
@@ -104,22 +100,12 @@ public class SideMenu {
         sidePanel.setBackground(Color.darkGray);
     }
     
-    //USTAW POPRAWNIE KOLORYSTYKE!!!!!!!!!!!!
-    //SLIDERY TAK SAMO KOLOROWAĆ w kazdej funckji
-    //reszta w konstruktorze
-    
-    
-    //slider for rgb begining = 0, end = 255, middlevalue = 177, majortTickSpacing = 51, minorTickSpacing = 1
-        
     public JPanel setSideMenu1Slider(String slidername1, int begining, int end, int beginingValue, int majorTickSpacing, int minorTickSpacing, String desc) {
         
         this.sidePanel.removeAll();
         this.sidePanel.setLayout(new BoxLayout(this.sidePanel, BoxLayout.Y_AXIS));
         
         slider1Name.setText(slidername1);
-        //slider1Name.setBackground(Color.darkGray);
-        //slider1Name.setForeground(Color.white);
-        //slider1Name.setOpaque(true);
         
         slider1 = new JSlider(JSlider.HORIZONTAL, begining, end, beginingValue);
         slider1.setMajorTickSpacing(majorTickSpacing);
@@ -128,30 +114,17 @@ public class SideMenu {
         slider1.setPaintLabels(true);
         slider1.setBackground(Color.darkGray);
         slider1.setForeground(Color.white);
-
-        //text1.setMaximumSize(new Dimension(1000,25));
-        //text1.setHorizontalAlignment(SwingConstants.CENTER);
+        
         text1.setText(Integer.toString(beginingValue));
         
-        listener1 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text1.setText("" + source.getValue());
-            }
-         };
+        listener1 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text1.setText("" + source.getValue());
+        };
         
         
         
         buttonPanel.add(aply);
-        //buttonPanel.setBackground(Color.darkGray);
-       // aply.setPreferredSize(new Dimension(200,30));
-       // aply.setBackground(Color.green);
-       // aply.setForeground(Color.white);
-       // aply.setFont(new Font("Arial", Font.BOLD, 25));
        
         description.removeAll();
         description.setText(desc);
@@ -195,50 +168,23 @@ public class SideMenu {
         slider2.setBackground(Color.darkGray);
         slider2.setForeground(Color.white);
 
-        //text1.setMaximumSize(new Dimension(1000,30));
-        //text1.setHorizontalAlignment(SwingConstants.CENTER);
         text1.setText(Integer.toString(beginingValue1));
         
-        //text2.setMaximumSize(new Dimension(1000,30));
-        //text2.setHorizontalAlignment(SwingConstants.CENTER);
         text2.setText(Integer.toString(beginingValue2));
         
-        listener1 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text1.setText("" + source.getValue());
-            }
-         };
+        listener1 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text1.setText("" + source.getValue());
+        };
         
         buttonPanel.add(aply);
-       // buttonPanel.setBackground(Color.black);
-       // aply.setPreferredSize(new Dimension(200,30));
-       // aply.setBackground(Color.green);
-       // aply.setForeground(Color.white);
-       // aply.setFont(new Font("Arial", Font.BOLD, 25));
         
-        listener2 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text2.setText("" + source.getValue());
-            }
-         };
+        listener2 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text2.setText("" + source.getValue());
+        };
         description.removeAll();
         description.setText(desc);
-       // description.setFont(new Font("Arial", Font.BOLD, 17));
-       // description.setBackground(Color.BLACK);
-       // description.setForeground(Color.WHITE);
-       // description.setMargin(new Insets(10,10,10,10));
-       // description.setWrapStyleWord(true);
-       // description.setLineWrap(true);
         
         this.slider1.addChangeListener(listener1);
         this.slider2.addChangeListener(listener2);
@@ -289,65 +235,30 @@ public class SideMenu {
         slider3.setBackground(Color.darkGray);
         slider3.setForeground(Color.white);
 
-        //text1.setMaximumSize(new Dimension(1000,30));
-        //text1.setHorizontalAlignment(SwingConstants.CENTER);
         text1.setText(Integer.toString(beginingValue1));
         
-        //text2.setMaximumSize(new Dimension(1000,30));
-        //text2.setHorizontalAlignment(SwingConstants.CENTER);
         text2.setText(Integer.toString(beginingValue2));
         
-        //text3.setMaximumSize(new Dimension(1000,30));
-        //text3.setHorizontalAlignment(SwingConstants.CENTER);
         text3.setText(Integer.toString(beginingValue3));
         
-        listener1 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text1.setText("" + source.getValue());
-            }
-         };
+        listener1 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text1.setText("" + source.getValue());
+        };
         
         buttonPanel.add(aply);
-        //buttonPanel.setBackground(Color.black);
-        //aply.setPreferredSize(new Dimension(200,30));
-        //aply.setBackground(Color.green);
-        //aply.setForeground(Color.white);
-        //aply.setFont(new Font("Arial", Font.BOLD, 25));
         
-        listener2 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text2.setText("" + source.getValue());
-            }
-         };
+        listener2 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text2.setText("" + source.getValue());
+        };
         description.removeAll();
         description.setText(desc);
-        //description.setFont(new Font("Arial", Font.BOLD, 17));
-        //description.setBackground(Color.BLACK);
-        //description.setForeground(Color.WHITE);
-        //description.setMargin(new Insets(10,10,10,10));
-        //description.setWrapStyleWord(true);
-        //description.setLineWrap(true);
         
-        listener3 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text3.setText("" + source.getValue());
-            }
-         };
+        listener3 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text3.setText("" + source.getValue());
+        };
         
         this.slider1.addChangeListener(listener1);
         this.slider2.addChangeListener(listener2);
@@ -402,65 +313,30 @@ public class SideMenu {
         slider3.setBackground(Color.darkGray);
         slider3.setForeground(Color.white);
 
-        //text1.setMaximumSize(new Dimension(1000,30));
-        //text1.setHorizontalAlignment(SwingConstants.CENTER);
         text1.setText(Integer.toString(0));
         
-        //text2.setMaximumSize(new Dimension(1000,30));
-        //text2.setHorizontalAlignment(SwingConstants.CENTER);
         text2.setText(Integer.toString(0));
         
-        //text3.setMaximumSize(new Dimension(1000,30));
-       // text3.setHorizontalAlignment(SwingConstants.CENTER);
         text3.setText(Integer.toString(0));
         
-        listener1 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text1.setText("" + source.getValue());
-            }
-         };
+        listener1 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text1.setText("" + source.getValue());
+        };
         
         buttonPanel.add(aply);
-        //buttonPanel.setBackground(Color.black);
-        //aply.setPreferredSize(new Dimension(200,30));
-        //aply.setBackground(Color.green);
-        //aply.setForeground(Color.white);
-        //aply.setFont(new Font("Arial", Font.BOLD, 25));
         
-        listener2 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text2.setText("" + source.getValue());
-            }
-         };
+        listener2 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text2.setText("" + source.getValue());
+        };
         description.removeAll();
         description.setText(desc);
-        //description.setFont(new Font("Arial", Font.BOLD, 17));
-       // description.setBackground(Color.BLACK);
-       // description.setForeground(Color.WHITE);
-       // description.setMargin(new Insets(10,10,10,10));
-       // description.setWrapStyleWord(true);
-       // description.setLineWrap(true);
         
-        listener3 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text3.setText("" + source.getValue());
-            }
-         };
+        listener3 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text3.setText("" + source.getValue());
+        };
         
         JTextField text00 = new JTextField(3);  this.textForMatrix3x3[0] = text00;
         JTextField text01 = new JTextField(3);  this.textForMatrix3x3[1] = text01;
@@ -476,6 +352,7 @@ public class SideMenu {
         
         JLabel matrixDesc = new JLabel();
         matrixDesc.setText("Macierz dla filtru");
+        matrixDesc.setForeground(Color.white);
         
         this.matrixPanel3x3.removeAll();
         for(int i = 0; i<9; i++){
@@ -516,27 +393,13 @@ public class SideMenu {
         
         
         buttonPanel.add(aply);
-       // buttonPanel.setBackground(Color.darkGray);
-       // aply.setPreferredSize(new Dimension(200,30));
-       // aply.setBackground(Color.green);
-      //  aply.setForeground(Color.white);
-      //  aply.setFont(new Font("Arial", Font.BOLD, 25));
        
-        //description.remove
         description.removeAll();
         description.setText(desc);
-       // description.setFont(new Font("Arial", Font.BOLD, 17));
-       // description.setBackground(Color.darkGray);
-        //description.setForeground(Color.WHITE);
-       // description.setMargin(new Insets(10,10,10,10));
-       // description.setWrapStyleWord(true);
-       // description.setLineWrap(true);
-       // 
        
         this.sidePanel.add(description);
         this.sidePanel.add(buttonPanel);
         
-       // this.sidePanel.setBackground(Color.darkGray);
         description.revalidate();
         description.repaint();
         return this.sidePanel;
@@ -577,65 +440,30 @@ public class SideMenu {
         slider3.setBackground(Color.darkGray);
         slider3.setForeground(Color.white);
 
-        //text1.setMaximumSize(new Dimension(1000,30));
-       // text1.setHorizontalAlignment(SwingConstants.CENTER);
         text1.setText(Integer.toString(0));
         
-       // text2.setMaximumSize(new Dimension(1000,30));
-       // text2.setHorizontalAlignment(SwingConstants.CENTER);
         text2.setText(Integer.toString(0));
         
-       // text3.setMaximumSize(new Dimension(1000,30));
-       // text3.setHorizontalAlignment(SwingConstants.CENTER);
         text3.setText(Integer.toString(0));
         
-        listener1 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text1.setText("" + source.getValue());
-            }
-         };
+        listener1 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text1.setText("" + source.getValue());
+        };
         
         buttonPanel.add(aply);
-       // buttonPanel.setBackground(Color.black);
-       // aply.setPreferredSize(new Dimension(200,30));
-       // aply.setBackground(Color.green);
-       // aply.setForeground(Color.white);
-       // aply.setFont(new Font("Arial", Font.BOLD, 25));
         
-        listener2 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text2.setText("" + source.getValue());
-            }
-         };
+        listener2 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text2.setText("" + source.getValue());
+        };
         description.removeAll();
         description.setText(desc);
-       // description.setFont(new Font("Arial", Font.BOLD, 17));
-       // description.setBackground(Color.BLACK);
-       // description.setForeground(Color.WHITE);
-       // description.setMargin(new Insets(10,10,10,10));
-       // description.setWrapStyleWord(true);
-       // description.setLineWrap(true);
         
-        listener3 = new ChangeListener()
-         {
-            @Override
-            public void stateChanged(ChangeEvent event)
-            {
-               // update text field when the slider value changes
-               JSlider source = (JSlider) event.getSource();
-               text3.setText("" + source.getValue());
-            }
-         };
+        listener3 = (ChangeEvent event) -> {
+            JSlider source = (JSlider) event.getSource();
+            text3.setText("" + source.getValue());
+        };
         
         JTextField text00 = new JTextField(3);  this.textForMatrix5x5[0] = text00;
         JTextField text01 = new JTextField(3);  this.textForMatrix5x5[1] = text01;
@@ -672,6 +500,7 @@ public class SideMenu {
         
         JLabel matrixDesc = new JLabel();
         matrixDesc.setText("Macierz dla filtru");
+        matrixDesc.setForeground(Color.white);
         
         this.matrixPanel5x5.removeAll();
         for(int i = 0; i<25; i++){

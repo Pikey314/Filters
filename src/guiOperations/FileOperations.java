@@ -7,17 +7,28 @@ package guiOperations;
 
 import gui.MainFrame;
 import java.io.IOException;
+import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class FileOperations {
-    private JTextField filename = new JTextField();
-    private JTextField dir = new JTextField();
+    private final JTextField filename = new JTextField();
+    private final JTextField dir = new JTextField();
 
     public void openFile(MainFrame mainFrame) {
+        UIManager.put("FileChooser.fileNameLabelText", "Nazwa Pliku");
+        UIManager.put("FileChooser.filesOfTypeLabelText", "Typ Pliku");
+        UIManager.put("FileChooser.openButtonText", "Otwórz");
+        UIManager.put("FileChooser.cancelButtonText", "Anuluj");
+        UIManager.put("FileChooser.lookInLabelText", "Szukaj w");
+        UIManager.put("FileChooser.acceptAllFileFilterText", "Wszystkie pliki");
         JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "jpeg");
+
+
+        fileChooser.setDialogTitle("Wybierz plik graficzny");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Pliki graficzne", "jpg", "png", "gif", "jpeg", "bmp");
         fileChooser.setFileFilter(filter);
         int flag = fileChooser.showOpenDialog(mainFrame);
         if (flag == JFileChooser.APPROVE_OPTION) {
@@ -34,14 +45,20 @@ public class FileOperations {
             
         }
         if (flag == JFileChooser.CANCEL_OPTION) {
-            this.filename.setText("You pressed cancel");
+            this.filename.setText("Wcisnąłeś 'Cancel'");
             this.dir.setText("");
         }
     }
 
     public void saveFile(MainFrame mainFrame) throws IOException {
+        UIManager.put("FileChooser.fileNameLabelText", "Nazwa Pliku");
+        UIManager.put("FileChooser.filesOfTypeLabelText", "Typ Pliku");
+        UIManager.put("FileChooser.saveButtonText", "Zapisz");
+        UIManager.put("FileChooser.cancelButtonText", "Anuluj");
+        UIManager.put("FileChooser.saveInLabelText", "Szukaj w");
+        UIManager.put("FileChooser.acceptAllFileFilterText", "Wszystkie pliki");
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Specify a file to save");
+        fileChooser.setDialogTitle("Wybierz miejsce do zapisu pliku");
         int userSelection = fileChooser.showSaveDialog(mainFrame);
         if (userSelection == 0) {
             String fileToSave = fileChooser.getSelectedFile().toString();
@@ -51,7 +68,6 @@ public class FileOperations {
                 ++i;
                 }
             }
-            System.out.println(fileToSave);
             mainFrame.savePicture(fileToSave);
         }
     }

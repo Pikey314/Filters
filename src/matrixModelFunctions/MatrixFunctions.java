@@ -33,20 +33,15 @@ public class MatrixFunctions {
             int RC = matrix[1][2];
             int RD = matrix[2][2];
             
-            System.out.println(LU + " " + CU + " " + RU);
-            System.out.println(LC + " " + CC + " " + RC);
-            System.out.println(LD + " " + CD + " " + RD);
             
             
             int matrixSum = LU + LC + LD + CU + CC + CD + RU + RC + RD;
-           System.out.println("suma " + matrixSum);
        
        
         
         
         Color colorOfPixel;
         
-           // int alpha; 
             int red[][] = new int[image.getWidth()][image.getHeight()];
             int green[][] = new int[image.getWidth()][image.getHeight()];
             int blue[][] = new int[image.getWidth()][image.getHeight()];
@@ -66,8 +61,7 @@ public class MatrixFunctions {
                    green[i][j] = colorOfPixel.getGreen();
                    blue[i][j] = colorOfPixel.getBlue();
                    
-                
-               // image.setRGB(j, i, new Color(red, green, blue).getRGB());
+               
             }
         }
         
@@ -243,19 +237,13 @@ public class MatrixFunctions {
             int RRD = matrix[3][4];
             int RRDR = matrix[4][4];
             
-            System.out.println(LLUL + " " + LUU + " " + CUU + " " + RUU + " " + RRUR);
-            System.out.println(LLU + " " + LU + " " + CU + " " + RU + " " + RRU);
-            System.out.println(LLC + " " + LC + " " + CC + " " + RC + " " + RRC);
-            System.out.println(LLD + " " + LD + " " + CD + " " + RD + " " + RRD);
-            System.out.println(LLDL + " " + LDD + " " + CDD + " " + RDD + " " + RRDR); 
             
             
             int matrixSum = LU + LC + LD + LUU + LDD + CU + CC + CD + CUU + CDD + RU + RC + RD + RUU + RDD + LLU + LLC + LLD + LLUL + LLDL + RRUR + RRU + RRC + RRD + RRDR;
-           System.out.println("suma " + matrixSum);
+           
            
             Color colorOfPixel;
         
-           // int alpha; 
             int red[][] = new int[image.getWidth()][image.getHeight()];
             int green[][] = new int[image.getWidth()][image.getHeight()];
             int blue[][] = new int[image.getWidth()][image.getHeight()];
@@ -275,8 +263,6 @@ public class MatrixFunctions {
                    green[i][j] = colorOfPixel.getGreen();
                    blue[i][j] = colorOfPixel.getBlue();
                    
-                
-               // image.setRGB(j, i, new Color(red, green, blue).getRGB());
             }
         }
         
@@ -728,11 +714,6 @@ public class MatrixFunctions {
 
 
 
-
-
-
-
-
  public void matrix7x7Funtion (BufferedImage image, JPanel picturePanel, int[][] matrix, int matrixSize) {
       
         if (matrix.length == matrixSize && matrix[0].length == matrixSize && matrix[1].length == matrixSize && matrix[2].length == matrixSize && matrix[3].length == matrixSize && matrix[4].length == matrixSize && matrix[5].length == matrixSize && matrix[6].length == matrixSize) {    
@@ -763,18 +744,10 @@ public class MatrixFunctions {
             int RRD = matrix[4][5];     int E24 = matrix[6][6];
             int RRDR = matrix[5][5];
             
-            System.out.println(E1 + " " + E2 + " " + E3 + " " + E4 + " " + E5 + " " + E6 + " " + E7);
-            System.out.println(E8 + " " + LLUL + " " + LUU + " " + CUU + " " + RUU + " " + RRUR + " " + E9);
-            System.out.println(E10 + " " + LLU + " " + LU + " " + CU + " " + RU + " " + RRU + " " + E11);
-            System.out.println(E12 + " " + LLC + " " + LC + " " + CC + " " + RC + " " + RRC + " " + E13);
-            System.out.println(E14 + " " + LLD + " " + LD + " " + CD + " " + RD + " " + RRD + " " + E15);
-            System.out.println(E16 + " " + LLDL + " " + LDD + " " + CDD + " " + RDD + " " + RRDR + " " + E17); 
-            System.out.println(E18 + " " + E19 + " " + E20 + " " + E21 + " " + E22 + " " + E23 + " " + E24); 
-            
             
             int matrixSum = LU + LC + LD + LUU + LDD + CU + CC + CD + CUU + CDD + RU + RC + RD + RUU + RDD + LLU + LLC + LLD + LLUL + LLDL + RRUR + RRU + RRC + RRD + RRDR;
             int matrix7Sum = matrixSum + E1 + E2 + E3 + E4 + E5 + E6 + E7 + E8+ E9 + E10 + E11 + E12 + E13 + E14 + E15 + E16 + E17 + E18 + E19 + E20 + E21 + E22 + E23 + E24;
-           System.out.println("suma " + matrixSum);
+ 
            
             Color colorOfPixel;
         
@@ -798,8 +771,6 @@ public class MatrixFunctions {
                    green[i][j] = colorOfPixel.getGreen();
                    blue[i][j] = colorOfPixel.getBlue();
                    
-                
-               // image.setRGB(j, i, new Color(red, green, blue).getRGB());
             }
         }
         

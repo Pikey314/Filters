@@ -11,17 +11,12 @@ import guiOperations.FileOperations;
 import guiOperations.UndoRedoOperations;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
 import matrixModelFunctions.MatrixFunctions;
 import matrixModelFunctions.StatisticFunctions;
 import matrixes.Matrixes3;
@@ -37,26 +32,23 @@ public class MenuBar {
     
     private final RGBModelFunctions rgbFilters = new RGBModelFunctions();
     private final HSVModelFunctions hsvFilters = new HSVModelFunctions();
-    private final ArrayList buttons = new ArrayList();
-    private MainFrame mainFrame;
-    UndoRedoOperations undoRedo;
-    OptionPanelButtons optionPanelButtons;
-    private final JTextField filename = new JTextField();
-    private final JTextField dir = new JTextField();
     private final MatrixFunctions matrixFunction = new MatrixFunctions();
-    FileOperations fileOperations = new FileOperations();
+    private final FileOperations fileOperations = new FileOperations();
     private final SideMenu sideMenu = new SideMenu();
-    JPopupMenu popupMenu = new JPopupMenu("Title");
-    StatisticFunctions statisticFunction = new StatisticFunctions();
-    Matrixes3 matrixes3 = new Matrixes3();
-    Matrixes5 matrixes5 = new Matrixes5();
+    private final StatisticFunctions statisticFunction = new StatisticFunctions();
+    private final Matrixes3 matrixes3 = new Matrixes3();
+    private final Matrixes5 matrixes5 = new Matrixes5();
+    private MainFrame mainFrame;
+    private UndoRedoOperations undoRedo;
+    private OptionPanelButtons optionPanelButtons;
+    
     
     public JMenuBar setMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu file = new JMenu("   Plik   ");
             JMenuItem openFile = new JMenuItem("Otwórz Nowy Plik");
-            JMenuItem saveFile = new JMenuItem("Zapisz Jako");
+            JMenuItem saveFile = new JMenuItem("Zapisz Na Dysku");
         file.add(openFile);
         file.addSeparator();
         file.add(saveFile);
@@ -204,9 +196,15 @@ public class MenuBar {
             statistics.add(maximal);
             statistics.add(minimal);
         filters.add(statistics);
-            JMenu HSVModel = new JMenu("   Akcent   ");
-                JMenuItem accent = new JMenuItem("Usuń kolory (HSV)");
+            JMenu HSVModel = new JMenu("   Model HSV   ");
+                JMenuItem accent = new JMenuItem("Akcent");
+                JMenuItem color = new JMenuItem("Kolor");
+                JMenuItem saturation = new JMenuItem("Nasycenie");
+                JMenuItem light = new JMenuItem("Jasność");
             HSVModel.add(accent);
+            HSVModel.add(color);
+            HSVModel.add(saturation);
+            HSVModel.add(light);
         filters.add(HSVModel);
             JMenu inverting = new JMenu("   Dostosowanie   ");
                 JMenuItem gamma = new JMenuItem("Korekcja Gamma");//Gamma
@@ -249,596 +247,403 @@ public class MenuBar {
         //funkcje
         
         //for FILES START
-        openFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                fileOperations.openFile(mainFrame);
-            }
+        openFile.addActionListener((ActionEvent event) -> {
+            fileOperations.openFile(mainFrame);
         });
         
-        saveFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    fileOperations.saveFile(mainFrame);
-                } catch (IOException ex) {
-                    Logger.getLogger(OptionPanelButtons.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        saveFile.addActionListener((ActionEvent event) -> {
+            try {
+                fileOperations.saveFile(mainFrame);
+            } catch (IOException ex) {
+                Logger.getLogger(OptionPanelButtons.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         //for FILES END
         
         
         //for FILTERS START
-        median.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-              mainFrame.add(sideMenu.setSideMenu1Slider("Moc",1,3,1,1,1,AllTexts.medianFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-                    statisticFunction.statisticFunction3x3(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Median");
-                    mainFrame.revalidate();
-                    }
-                });
-              mainFrame.revalidate();
-            }
+        median.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setSideMenu1Slider("Moc",1,3,1,1,1,AllTexts.medianFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                if (sideMenu.getTextField1Value() == 1)
+                   statisticFunction.statisticFunction3x3(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Median");
+                else if (sideMenu.getTextField1Value() == 2)
+                   statisticFunction.statisticFunction5x5(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Median");
+                else
+                   statisticFunction.statisticFunction7x7(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Median");
+                mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
         });
         
-        maximal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-              mainFrame.add(sideMenu.setSideMenu1Slider("Moc",1,3,1,1,1,AllTexts.maximalFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-                    statisticFunction.statisticFunction3x3(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Maximal");
-                    mainFrame.revalidate();
-                    }
-                });
-              mainFrame.revalidate();
-            }
+        maximal.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setSideMenu1Slider("Moc",1,3,1,1,1,AllTexts.maximalFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                if (sideMenu.getTextField1Value() == 1)
+                   statisticFunction.statisticFunction3x3(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Maximal");
+                else if (sideMenu.getTextField1Value() == 2)
+                   statisticFunction.statisticFunction5x5(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Maximal");
+                else
+                   statisticFunction.statisticFunction7x7(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Maximal");
+                mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
         });
         
-        minimal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                mainFrame.add(sideMenu.setSideMenu1Slider("Moc",1,3,1,1,1,AllTexts.minimalFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-                    statisticFunction.statisticFunction3x3(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Minimal");
-                    mainFrame.revalidate();
-                    }
-                });
-              mainFrame.revalidate();
-            }
+        minimal.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setSideMenu1Slider("Moc",1,3,1,1,1,AllTexts.minimalFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                if (sideMenu.getTextField1Value() == 1)
+                   statisticFunction.statisticFunction3x3(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Minimal");
+                else if (sideMenu.getTextField1Value() == 2)
+                   statisticFunction.statisticFunction5x5(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Minimal");
+                else
+                   statisticFunction.statisticFunction7x7(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "Minimal");
+                mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
         });
         
-        prewittHorizontal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.prewittHorizontalFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.prewittHorizontalMatrix, 3);
-                    mainFrame.revalidate();
-                    }
-                });
-              mainFrame.revalidate();
-            }
+        prewittHorizontal.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.prewittHorizontalFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.prewittHorizontalMatrix, 3);
+                mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
         });
         
-        prewittVertical.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.prewittVerticalFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.prewittVerticalMatrix, 3);
-                    mainFrame.revalidate();
-                    }
-                });
-              mainFrame.revalidate();
-            }
+        prewittVertical.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.prewittVerticalFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.prewittVerticalMatrix, 3);
+                mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
         });
         
-        sobelHorizontal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.sobelHorizontalFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.sobelHorizontalMatrix, 3);
-                    mainFrame.revalidate();
-                    }
-                });
-              mainFrame.revalidate();
-            }
+        sobelHorizontal.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.sobelHorizontalFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.sobelHorizontalMatrix, 3);
+                mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
         });
         
-        sobelVertical.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.sobelVerticalFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.sobelVerticalMatrix, 3);
-                    mainFrame.revalidate();
-                    }
-                });
-              mainFrame.revalidate();
-            }
+        sobelVertical.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.sobelVerticalFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.sobelVerticalMatrix, 3);
+                mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
         });
         
-        lapVertical.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-              mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.lapVerticalFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-                    matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lapVerticalMatrix, 3);
-                    mainFrame.revalidate();
-                    }
-                });
-              mainFrame.revalidate();
-            }
+        lapVertical.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.lapVerticalFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lapVerticalMatrix, 3);
+                mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
         });
         
-        lapHorizontal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        lapHorizontal.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.lapHorizontalFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lapHorizontalMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        lapOblique.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        lapOblique.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.lapObliqueFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lapObliqueMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        lap3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        lap3.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.lap3FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lap3Matrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        lap2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        lap2.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.lap2FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lap2Matrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        lap1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        lap1.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.lap1FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lap1Matrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        eastE.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        eastE.addActionListener((ActionEvent event) -> {
               mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.eastEmbossingFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.embossingEastMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        westE.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        westE.addActionListener((ActionEvent event) -> {
               mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.westEmbossingFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.embossingWestMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        southE.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        southE.addActionListener((ActionEvent event) -> {
               mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.southEmbossingFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.embossingSouthMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        northE.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        northE.addActionListener((ActionEvent event) -> {
               mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.nothEmbossingFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.embossingNorthMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        northwestE.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        northwestE.addActionListener((ActionEvent event) -> {
               mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.northWestEmbossingFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.embossingNorthWestMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-         southwestE.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+         southwestE.addActionListener((ActionEvent event) -> {
               mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.southWestEmbossingFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.embossingSouthWestMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
          
-         northeastE.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+         northeastE.addActionListener((ActionEvent event) -> {
               mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.northEastEmbossingFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.embossingNorthEastMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
          
-        southeastE.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        southeastE.addActionListener((ActionEvent event) -> {
               mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.southEastEmbossingFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.embossingSouthEastMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        northeast.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        northeast.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.northEastGradientFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.northEastMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        southeast.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        southeast.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.southEastGradientFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.southEastMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        northwest.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        northwest.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.northWestGradientFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.northWestMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        southwest.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        southwest.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.southWestGradientFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.southWestMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        south.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        south.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.southGradientFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.southMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        north.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        north.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.northGradientFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.northMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        east.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        east.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.eastGradientFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.eastMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        west.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        west.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.westGradientFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.westMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        oblique2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        oblique2.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.oblique2FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.oblique2Matrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        oblique1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        oblique1.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.oblique1FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.oblique1Matrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        horizontal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        horizontal.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.horizontalFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.horizontalMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-         vertical.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+         vertical.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.verticalFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.verticalMatrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
          
-        removeAverage.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        removeAverage.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setSideMenu1Slider("Moc",1,3,1,1,1,AllTexts.removeAverageFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     if (sideMenu.getTextField1Value() == 1)
                         matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.removeAverageMatrix, 3);
@@ -847,206 +652,135 @@ public class MenuBar {
                     else 
                         matrixFunction.matrix7x7Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes7.removeAverageMatrix, 7);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        hp3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        hp3.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.hp3FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.hp3Matrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        hp2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        hp2.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.hp2FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.hp2Matrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        hp1.addActionListener(new ActionListener() {@Override
-            public void actionPerformed(ActionEvent event) {
+        hp1.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.hp1FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.hp1Matrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        gauss1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        gauss1.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.gauss1FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.gauss1Matrix, 3);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        gauss2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        gauss2.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.gauss2FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes5.gauss2Matrix, 5);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        gauss3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        gauss3.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.gauss3FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes5.gauss3Matrix, 5);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        gauss4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        gauss4.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.gauss4FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes5.gauss4Matrix, 5);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        gauss5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        gauss5.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.gauss5FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix7x7Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes7.gauss5Matrix, 7);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        cone.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        cone.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.coneFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes5.coneMatrix, 5);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        circle.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        circle.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.circleFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes5.circleMatrix, 5);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        piramide.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        piramide.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.piramideFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     matrixFunction.matrix5x5Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes5.piramideMatrix, 5);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        strongE.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        strongE.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setSideMenu1Slider("Moc", 1,3,1,1,1,AllTexts.strongEmbossingFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     if (sideMenu.getTextField1Value() == 1)
                         matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.embossingNorthMatrix, 3);
@@ -1055,20 +789,14 @@ public class MenuBar {
                     else
                         matrixFunction.matrix7x7Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes7.embossingNorthMatrix, 7);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        lp3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        lp3.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setSideMenu1Slider("Moc", 1,3,1,1,1,AllTexts.lp3FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     if (sideMenu.getTextField1Value() == 1)
                         matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lP3Matrix, 3);
@@ -1077,20 +805,14 @@ public class MenuBar {
                     else 
                         matrixFunction.matrix7x7Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes7.lP3Matrix, 7);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        lp2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        lp2.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setSideMenu1Slider("Moc", 1,3,1,1,1,AllTexts.lp2FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     if (sideMenu.getTextField1Value() == 1)
                         matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lP2Matrix, 3);
@@ -1099,20 +821,14 @@ public class MenuBar {
                     else 
                         matrixFunction.matrix7x7Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes7.lP2Matrix, 7);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        lp1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        lp1.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setSideMenu1Slider("Moc", 1,3,1,1,1,AllTexts.lp1FilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     if (sideMenu.getTextField1Value() == 1)
                         matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.lP1Matrix, 3);
@@ -1121,20 +837,14 @@ public class MenuBar {
                     else 
                         matrixFunction.matrix7x7Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes7.lP1Matrix, 7);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        averaging.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        averaging.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setSideMenu1Slider("Moc", 1,3,1,1,1,AllTexts.averageFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     if (sideMenu.getTextField1Value() == 1)
                         matrixFunction.matrix3x3Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes3.averagingMatrix, 3);
@@ -1143,332 +853,249 @@ public class MenuBar {
                     else 
                         matrixFunction.matrix7x7Funtion(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), Matrixes7.averagingMatrix, 7);
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        blueFilter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        blueFilter.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.setSideMenu1Slider("Wartość",0,255,177,51,1, AllTexts.blueFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+               sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                         undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "blue", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        greenFilter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        greenFilter.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.setSideMenu1Slider("Wartość", 0,255,177,51,1,AllTexts.greenFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+               sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                         undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "green", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        redFilter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        redFilter.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.setSideMenu1Slider("Wartość",0,255,177,51,1, AllTexts.redFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+               sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                         undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "red", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        yellowFilter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        yellowFilter.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.setSideMenu1Slider("Wartość",0,255,177,51,1, AllTexts.yellowFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+               sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                         undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "yellow", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        purpleFilter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        purpleFilter.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.setSideMenu1Slider("Wartość",0,255,177,51,1, AllTexts.purpleFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+               sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "purple", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        cyanFilter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        cyanFilter.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.setSideMenu1Slider("Wartość",0,255,177,51,1, AllTexts.cyanFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+               sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "cyan", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        ownColor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        ownColor.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.setSideMenu3Sliders("Czerwony", -255,255,0,100,10, "Zielony", -255,255,0,100,10, "Niebieski", -255,255,0,100,10,AllTexts.ownColorFilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                        undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+               sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.ownRGBFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "ownColor", sideMenu.getTextField1Value(), sideMenu.getTextField2Value(), sideMenu.getTextField3Value());
                     mainFrame.revalidate();
-                    }
                 });
               mainFrame.revalidate();
-            }
         });
         
-        bright.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        bright.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", 0,255,177,51,1,AllTexts.brightFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "white", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
                 });
                 mainFrame.revalidate();
-            }
         });
         
-        dark.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        dark.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", 0,255,177,51,1,AllTexts.darkFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "black", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
                 });
                 mainFrame.revalidate();
-            }
         });
         
-        negative.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        negative.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.negativeFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "negative", 0);
                     mainFrame.revalidate();
-                    }
                 });
                 mainFrame.revalidate();
-            }
         });
         
-        greyScale.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        greyScale.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.greyScaleFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "greyScale", 0);
                     mainFrame.revalidate();
-                    }
                 });
                 mainFrame.revalidate();
-            }
         });
         
-        sepia.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        sepia.addActionListener((ActionEvent event) -> {
                 mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", 20,40,30,5,1,AllTexts.sepiaFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "sepia", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
                 });
                 mainFrame.revalidate();
-            }
         });
         
-        accent.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        accent.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.setSideMenu2Sliders("Kolor", 0,360,180,72,2, "Zakres", 0, 180, 20, 36,1,AllTexts.accentFilterText), BorderLayout.WEST);
                 sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+                sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     hsvFilters.hsvFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "accent", sideMenu.getTextField1Value(),sideMenu.getTextField2Value());
                     mainFrame.revalidate();
-                    }
                 });
                 mainFrame.revalidate();
-            }
+        });
+        
+        color.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", -180,180,0,72,2,AllTexts.colorHSVFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    hsvFilters.hsvFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "color", sideMenu.getTextField1Value(),0);
+                    mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
+        });
+        
+        light.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", -255,255,0,100,5,AllTexts.lightFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    hsvFilters.hsvFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "light", sideMenu.getTextField1Value(),0);
+                    mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
+        });
+         
+        saturation.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", -100,100,0,50,2,AllTexts.saturationFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                    hsvFilters.hsvFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "saturation", sideMenu.getTextField1Value(),0);
+                    mainFrame.revalidate();
+            });
+            mainFrame.revalidate();
         });
   
         
-        solarDefault.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", 0,255,177,51,1,AllTexts.solarisationFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+        solarDefault.addActionListener((ActionEvent event) -> {
+            mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", 0,255,177,51,1,AllTexts.solarisationFilterText), BorderLayout.WEST);
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "solarisation", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
-                });
-                mainFrame.revalidate();
-            }
+            });
+            mainFrame.revalidate();
         });
         
-        gamma.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        gamma.addActionListener((ActionEvent event) -> {
             mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", 1,50,22,5,1,AllTexts.gammaFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "gamma", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
-                });
-                mainFrame.revalidate();
-            }
+            });
+            mainFrame.revalidate();
         });
         
-        exposition.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        exposition.addActionListener((ActionEvent event) -> {
             mainFrame.add(sideMenu.setSideMenu1Slider("Poziom", -10,10,2,2,1,AllTexts.expositionFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                     undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
                     rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "exposition", sideMenu.getTextField1Value());
                     mainFrame.revalidate();
-                    }
-                });
-                mainFrame.revalidate();
-            }
+            });
+            mainFrame.revalidate();
         });
         
-        rozciaganie.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        rozciaganie.addActionListener((ActionEvent event) -> {
             mainFrame.add(sideMenu.setEmptySideMenu(AllTexts.histogramExtendFilterText), BorderLayout.WEST);
-                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-                sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                    undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
-                    rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "histogramExtend", -1);
-                    mainFrame.revalidate();
-                    }
-                });
+            sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
+            sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                undoRedo.addToUndoList(mainFrame.getImageToSave(), optionPanelButtons.getUndoButton());
+                rgbFilters.rgbFilter(mainFrame.getImageToSave(), mainFrame.getPicturePanel(), "histogramExtend", -1);
                 mainFrame.revalidate();
-            }
+            });
+            mainFrame.revalidate();
         });
         
-        own3x3Filter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        own3x3Filter.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.ownFilter3x3SidePanel(AllTexts.own3x3FilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
+               sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
                         matrixes3.setOwnMatrix(sideMenu.getOwnMatrix3x3());
                         optionPanelButtons.setFunctionalityForMyFilter3x3(sideMenu.getMatrixFirst3x3Button(), mainFrame.getImageToSave(), mainFrame.getPicturePanel(), matrixes3.getOwnMatrix(), sideMenu.getTextField1Value(), sideMenu.getTextField2Value(), sideMenu.getTextField3Value());
-                    }
-                });
+               });
                mainFrame.revalidate();
-            }
         });
         
-        own5x5Filter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        own5x5Filter.addActionListener((ActionEvent event) -> {
                mainFrame.add(sideMenu.ownFilter5x5SidePanel(AllTexts.own5x5FilterText), BorderLayout.WEST);
                sideMenu.getAcceptButton().removeActionListener(sideMenu.getAcceptButton().getActionListeners()[0]);
-               sideMenu.getAcceptButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent event) {
-                        matrixes5.setOwnMatrix(sideMenu.getOwnMatrix5x5());
-                        optionPanelButtons.setFunctionalityForMyFilter5x5(sideMenu.getMatrixFirst5x5Button(), mainFrame.getImageToSave(), mainFrame.getPicturePanel(), matrixes5.getOwnMatrix(), sideMenu.getTextField1Value(), sideMenu.getTextField2Value(), sideMenu.getTextField3Value());
-                    }
-                });
+               sideMenu.getAcceptButton().addActionListener((ActionEvent event1) -> {
+                   matrixes5.setOwnMatrix(sideMenu.getOwnMatrix5x5());
+                   optionPanelButtons.setFunctionalityForMyFilter5x5(sideMenu.getMatrixFirst5x5Button(), mainFrame.getImageToSave(), mainFrame.getPicturePanel(), matrixes5.getOwnMatrix(), sideMenu.getTextField1Value(), sideMenu.getTextField2Value(), sideMenu.getTextField3Value());
+               });
                mainFrame.revalidate();
-            }
         });
          //for FILTERS END
         

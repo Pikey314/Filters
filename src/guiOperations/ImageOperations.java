@@ -23,7 +23,6 @@ public class ImageOperations {
     
       public BufferedImage insertPicture(String file, JPanel picturePanel) {
         picturePanel.removeAll();
-        System.out.println(file);
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File(file));
@@ -34,7 +33,6 @@ public class ImageOperations {
         Image dimg = img.getScaledInstance(picturePanel.getWidth(), picturePanel.getHeight(), 4);
         ImageIcon pic = new ImageIcon(dimg);
         JLabel imageLabel = new JLabel(pic);
-        System.out.println("" + img.getWidth() + " " + img.getHeight());
         picturePanel.add(imageLabel);
         //pack();
         return img;
@@ -50,8 +48,6 @@ public class ImageOperations {
         if (!extensionValidator.equals(".jpg") && !extensionValidator.equals(".png")) {
             path = path + ".jpg";
         }
-        System.out.println(extensionValidator);
-        System.out.println(path);
         File outputfile = new File(path);
         ImageIO.write((RenderedImage)image, "jpg", outputfile);
     }

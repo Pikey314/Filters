@@ -12,8 +12,7 @@ import javax.swing.JTextField;
  * @author Maciek P
  */
 public class Matrixes3 {
-            //SET NECESSARRY VARIALBLES START
-        //Filtry dolnoprzepustowe - macierze
+    
         public static int averagingMatrix[][]   =    {{1,1,1},
                                         {1,1,1},
                                         {1,1,1}};
@@ -192,9 +191,6 @@ public class Matrixes3 {
                 else
                     this.ownMatrix[2][i-6] = Integer.parseInt(textFields[i].getText());
             }
-           System.out.println(this.ownMatrix[0][0] + " " + this.ownMatrix[0][1] + " " + this.ownMatrix[0][2] );
-           System.out.println(this.ownMatrix[1][0] + " " + this.ownMatrix[1][1] + " " + this.ownMatrix[1][2] );
-           System.out.println(this.ownMatrix[2][0] + " " + this.ownMatrix[2][1] + " " + this.ownMatrix[2][2] );
         }
         
         public int[][] getOwnMatrix(){
